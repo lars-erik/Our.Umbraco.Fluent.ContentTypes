@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
@@ -30,10 +28,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             base.CompareToExisting();
 
-            if (!IsModified)
-            {
-                IsModified = IsUnsafe = dataTypeDefinition.Id != Existing.DataTypeDefinitionId;
-            }
+            CompareDataType();
+        }
+
+        private void CompareDataType()
+        {
+            var differentDataType = dataTypeDefinition.Id != Existing.DataTypeDefinitionId;
+            Comparisons.Add(new Comparison("DataType", differentDataType ? ComparisonResult.Modified : ComparisonResult.Unchanged));
+            IsModified |= IsUnsafe |= differentDataType;
         }
 
         protected override PropertyType FindExisting()

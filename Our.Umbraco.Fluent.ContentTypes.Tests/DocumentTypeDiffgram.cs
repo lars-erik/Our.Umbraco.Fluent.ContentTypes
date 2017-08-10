@@ -25,10 +25,6 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             return true;
         }
 
-        protected override void CompareToExisting()
-        {
-        }
-
         protected override void CompareChildren()
         {
             foreach (var tab in Configuration.Tabs.Values)

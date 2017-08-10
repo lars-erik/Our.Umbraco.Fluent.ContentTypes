@@ -20,6 +20,35 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             When_Umbraco_Has_Document_Type(null, Has.Property("IsNew").True);
         }
 
+        [Test]
+        public void With_New_Compositions_Then_Is_Safe()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void With_NonExisting_Compositions_Then_Is_Unsafe()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void With_Compositions_In_Configuration_Then_Is_Safe()
+        {
+            Assert.Inconclusive("Need to build dependency graph :|");
+        }
+
+        [Test]
+        public void For_Orphan_Then_New_Parent_Is_Safe()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void With_New_Allowed_Children_Then_Is_Safe()
+        {
+            Assert.Inconclusive();
+        }
 
 
         private void When_Umbraco_Has_Document_Type(IContentType contentType, Constraint constraint)

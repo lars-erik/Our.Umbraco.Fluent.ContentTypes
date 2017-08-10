@@ -277,6 +277,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparison.cs" />
     <Compile Include="ComparisonTestBase.cs" />
     <Compile Include="DataTypeConfiguration.cs" />
     <Compile Include="Diffgram.cs" />

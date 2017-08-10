@@ -82,36 +82,21 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         }
 
         [Test]
-        public void With_New_Compositions_Then_Is_Safe()
+        public void Then_Keeps_List_Of_Comparisons()
         {
-            Assert.Inconclusive();
+            richTextConfig
+                .DisplayName("New Name")
+                .Description("New description");
+
+            var diff = RichTextDiffgram();
+
+            Assert.That(
+                diff.Comparisons,
+                Has.Exactly(1).With.Property("Key").EqualTo("Name").And.Property("Result").EqualTo(ComparisonResult.Modified) &
+                Has.Exactly(1).With.Property("Key").EqualTo("Description").And.Property("Result").EqualTo(ComparisonResult.Modified) &
+                Has.Exactly(1).With.Property("Key").EqualTo("DataType").And.Property("Result").EqualTo(ComparisonResult.Unchanged)
+            );
         }
-
-        [Test]
-        public void With_NonExisting_Compositions_Then_Is_Unsafe()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void With_Compositions_In_Configuration_Then_Is_Safe()
-        {
-            Assert.Inconclusive("Need to build dependency graph :|");
-        }
-
-        [Test]
-        public void For_Orphan_Then_New_Parent_Is_Safe()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void With_New_Allowed_Children_Then_Is_Safe()
-        {
-            Assert.Inconclusive();
-        }
-
-
 
         [Test]
         public void With_Invalid_DataType_Is_Unsafe()
@@ -162,5 +147,11 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             return diffgram.DocumentTypes["contentType"].Tabs["tab"];
         }
+    }
+
+    public enum ComparisonResult
+    {
+        Modified,
+        Unchanged
     }
 }
