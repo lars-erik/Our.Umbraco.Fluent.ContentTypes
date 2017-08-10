@@ -23,7 +23,7 @@
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeConfiguration">
     <Position X="8.25" Y="1.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIACAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
       <FileName>DocumentTypeConfigurator.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -33,7 +33,7 @@
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeConfigurator">
     <Position X="5" Y="1.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIgAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIgCAAAAAAAAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
       <FileName>DocumentTypeConfigurator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -44,9 +44,9 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeDiffgram">
-    <Position X="11.75" Y="3" Width="2.25" />
+    <Position X="11.75" Y="3.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQAACACAAAIAAAAAEAAAAAAAAgAAAg=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAACAAAAAIAAAAAEAAAAAAAAgAAAg=</HashCode>
       <FileName>DocumentTypeDiffgram.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -72,7 +72,7 @@
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyConfiguration">
     <Position X="8.25" Y="6" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PropertyConfigurator.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -96,7 +96,7 @@
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyTypeDiffgram">
     <Position X="11.75" Y="7.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAgQAIAACAAAIAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgQAIAASAAAIAAAAAAAAAAAAAAgAAAA=</HashCode>
       <FileName>PropertyTypeDiffgram.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -150,8 +150,18 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAACAAAAAAAAAQBACACABAIACAAAAAAgEBAAAgAAAA=</HashCode>
+      <HashCode>AAAACAAAAAEAAgQBACACABAMACAAAAAAgEBAAAgAAAA=</HashCode>
       <FileName>EntityDiffgram.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Comparisons" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.Comparison">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Comparison.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -21,21 +21,62 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         }
 
         [Test]
-        public void With_New_Compositions_Then_Is_Safe()
+        public void With_New_Compositions_Of_Existing_DocumentTypes_Then_Is_Safe()
         {
-            Assert.Inconclusive();
+            StubContentType("contentType");
+            StubContentType("compositeA");
+            StubContentType("compositeB");
+
+            Config.ContentType("contentType")
+                .Compositions("compositeA", "compositeB");
+
+            var diff = Config.Compare();
+
+            Assert.That(diff.DocumentTypes["contentType"].IsUnsafe, Is.False);
         }
 
         [Test]
         public void With_NonExisting_Compositions_Then_Is_Unsafe()
         {
-            Assert.Inconclusive();
+            StubContentType("contentType", Mock.Of<IContentType>());
+
+            Config.ContentType("contentType")
+                .Compositions("compositeA", "compositeB");
+
+            var fullDiff = Config.Compare();
+            var diff = fullDiff.DocumentTypes["contentType"];
+
+            Assert.That(
+                diff, 
+                Has.Property("IsUnsafe").True &
+                Has.Property("Comparisons").With.Exactly(2).With
+                    .Property("Key").EqualTo("Compositions").And
+                    .Property("Result").EqualTo(ComparisonResult.Invalid)
+                );
+
         }
 
         [Test]
         public void With_Compositions_In_Configuration_Then_Is_Safe()
         {
-            Assert.Inconclusive("Need to build dependency graph :|");
+            StubContentType("contentType", Mock.Of<IContentType>());
+
+            Config.ContentType("compositeA");
+
+            Config.ContentType("contentType")
+                .Compositions("compositeA", "compositeB");
+
+            var fullDiff = Config.Compare();
+            var diff = fullDiff.DocumentTypes["contentType"];
+
+            Assert.That(
+                diff,
+                Has.Property("IsUnsafe").True &
+                Has.Property("Comparisons").With.Exactly(2).With
+                    .Property("Key").EqualTo("Compositions") &
+                Has.Property("Comparisons").With.Exactly(1).Property("Result").EqualTo(ComparisonResult.New) &
+                Has.Property("Comparisons").With.Exactly(1).Property("Result").EqualTo(ComparisonResult.Invalid)
+                );
         }
 
         [Test]

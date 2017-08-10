@@ -152,6 +152,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     public enum ComparisonResult
     {
         Modified,
-        Unchanged
+        Unchanged,
+        Invalid,
+        New
     }
 }

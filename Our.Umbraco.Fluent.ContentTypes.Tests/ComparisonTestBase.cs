@@ -28,8 +28,15 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Support.DisposeUmbraco();
         }
 
+        protected void StubContentType(string contentTypeAlias)
+        {
+            StubContentType(contentTypeAlias, Mock.Of<IContentType>());
+        }
+
         protected void StubContentType(string contentTypeAlias, IContentType contentType)
         {
+            if (contentType != null)
+                contentType.Alias = contentTypeAlias;
             ContentTypeServiceMock.Setup(t => t.GetContentType(contentTypeAlias)).Returns(contentType);
         }
 
