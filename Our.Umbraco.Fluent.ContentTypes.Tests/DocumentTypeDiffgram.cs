@@ -4,37 +4,44 @@ using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public class DocumentTypeDiffgram
+    public class DocumentTypeDiffgram : EntityDiffgram<DocumentTypeConfiguration, IContentType>
     {
-        private readonly IContentTypeService contentTypeService;
         private readonly DocumentTypeConfigurator configurator;
-        private readonly ServiceContext serviceContext;
-        private DocumentTypeConfiguration configuration;
-        public string Alias => configurator.Alias;
-        public bool IsNew { get; set; }
+        private readonly IContentTypeService contentTypeService;
+
+        public override string Key => Configuration.Alias;
         public Dictionary<string, TabDiffgram> Tabs { get; }
 
         public DocumentTypeDiffgram(DocumentTypeConfigurator configurator, ServiceContext serviceContext)
+            : base(configurator, serviceContext)
         {
-            this.contentTypeService = serviceContext.ContentTypeService;
             this.configurator = configurator;
-            this.configuration = configurator.Configuration;
-            this.serviceContext = serviceContext;
+            this.contentTypeService = serviceContext.ContentTypeService;
             Tabs = new Dictionary<string, TabDiffgram>();
         }
 
-        public void Compare()
+        protected override bool ValidateConfiguration()
         {
-            var umbContentType = contentTypeService.GetContentType(configurator.Alias);
+            return true;
+        }
 
-            IsNew = umbContentType == null;
+        protected override void CompareToExisting()
+        {
+        }
 
+        protected override void CompareChildren()
+        {
             foreach (var tab in configurator.Tabs.Values)
             {
-                var tabDiff = new TabDiffgram(tab, umbContentType?.PropertyGroups ?? new PropertyGroupCollection(new PropertyGroup[0]), serviceContext);
+                var tabDiff = new TabDiffgram(tab, Existing?.PropertyGroups, ServiceContext);
                 Tabs.Add(tabDiff.Name, tabDiff);
                 tabDiff.Compare();
             }
+        }
+
+        protected override IContentType FindExisting()
+        {
+            return contentTypeService.GetContentType(Configuration.Alias);
         }
     }
 }

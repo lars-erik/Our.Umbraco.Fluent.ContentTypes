@@ -27,7 +27,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public void Compare()
         {
-            var group = propertyGroups.FirstOrDefault(g => g.Name == configuration.Name);
+            var group = propertyGroups?.FirstOrDefault(g => g.Name == configuration.Name);
 
             IsNew = group == null;
 
@@ -35,7 +35,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             {
                 var propDiff = new PropertyTypeDiffgram(
                     property, 
-                    group?.PropertyTypes ?? new PropertyTypeCollection(new PropertyType[0]),
+                    group?.PropertyTypes,
                     serviceContext
                 );
                 Properties.Add(property.Alias, propDiff);

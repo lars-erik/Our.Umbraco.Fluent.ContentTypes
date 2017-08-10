@@ -8,7 +8,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.Diffgram">
-    <Position X="15.25" Y="1.5" Width="1.5" />
+    <Position X="15.25" Y="1" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -33,7 +33,7 @@
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeConfigurator">
     <Position X="5" Y="1.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIgAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIgAAAAAAAEAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
       <FileName>DocumentTypeConfigurator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -42,16 +42,14 @@
     <ShowAsCollectionAssociation>
       <Property Name="Tabs" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeDiffgram">
     <Position X="11.75" Y="1.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAgAoAAAAAAAAAAAAAAACAAEAAAEBAAAAAAAg=</HashCode>
+      <HashCode>AAAAAAAAgAAAAAQAAAAAAAAIAAAAAEAAAABAAAAAAAg=</HashCode>
       <FileName>DocumentTypeDiffgram.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="configuration" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Tabs" />
     </ShowAsCollectionAssociation>
@@ -95,16 +93,14 @@
       <Field Name="parent" />
       <Property Name="Configuration" />
     </ShowAsAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyTypeDiffgram">
     <Position X="11.75" Y="6" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAgAAgAAAAAAABAAAAAAAAAAAEBAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgQAAAAAAAAIAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>PropertyTypeDiffgram.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="config" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.TabConfiguration">
     <Position X="8.25" Y="3.75" Width="2.5" />
@@ -135,6 +131,7 @@
     <ShowAsCollectionAssociation>
       <Property Name="Properties" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.TabDiffgram">
     <Position X="14.5" Y="3.75" Width="1.5" />

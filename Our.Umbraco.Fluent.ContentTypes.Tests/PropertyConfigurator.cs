@@ -1,6 +1,6 @@
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public class PropertyConfigurator
+    public class PropertyConfigurator : IConfigurator<PropertyConfiguration>
     {
         private readonly TabConfigurator parent;
 

@@ -282,6 +282,7 @@
     <Compile Include="Diffgram.cs" />
     <Compile Include="DocumentTypeConfigurator.cs" />
     <Compile Include="DocumentTypeDiffgram.cs" />
+    <Compile Include="EntityDiffgram.cs" />
     <Compile Include="FluentContentTypeConfiguration.cs" />
     <Compile Include="PropertyConfigurator.cs" />
     <Compile Include="PropertyTypeDiffgram.cs" />

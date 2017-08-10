@@ -5,43 +5,37 @@ using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public class PropertyTypeDiffgram
+    public class PropertyTypeDiffgram : EntityDiffgram<PropertyConfiguration, PropertyType>
     {
-        private readonly PropertyConfiguration config;
         private readonly PropertyTypeCollection propertyCollection;
-        private readonly ServiceContext serviceContext;
+        private IDataTypeDefinition dataTypeDefinition;
 
-        public bool IsNew { get; private set; }
-
-        public bool IsUnsafe { get; private set; }
+        public override string Key => Configuration.Alias;
 
         public PropertyTypeDiffgram(PropertyConfigurator configurator, PropertyTypeCollection propertyCollection, ServiceContext serviceContext)
+            : base(configurator, serviceContext)
         {
-            this.config = configurator.Configuration;
             this.propertyCollection = propertyCollection;
-            this.serviceContext = serviceContext;
         }
 
-        public void Compare()
+        protected override bool ValidateConfiguration()
         {
-            var existing = propertyCollection.SingleOrDefault(p => p.Alias == config.Alias);
-            var dataType = serviceContext.DataTypeService.GetDataTypeDefinitionByName(config.DataType);
+            dataTypeDefinition = ServiceContext.DataTypeService.GetDataTypeDefinitionByName(Configuration.DataType);
 
-            IsNew = existing == null;
+            return dataTypeDefinition != null;
+        }
 
-            if (dataType == null)
-            {
-                IsUnsafe = true;
-                return;
-            }
+        protected override void CompareToExisting()
+        {
+            IsUnsafe = IsModified =
+                !Configuration.DisplayName.InvariantEquals(Existing.Name) ||
+                !Configuration.Description.InvariantEquals(Existing.Description) ||
+                dataTypeDefinition.Id != Existing.DataTypeDefinitionId;
+        }
 
-            if (!IsNew)
-            {
-                IsUnsafe =
-                    !config.DisplayName.InvariantEquals(existing.Name) ||
-                    !config.Description.InvariantEquals(existing.Description) ||
-                    dataType.Id != existing.DataTypeDefinitionId;
-            }
+        protected override PropertyType FindExisting()
+        {
+            return propertyCollection?.SingleOrDefault(p => p.Alias == Configuration.Alias);
         }
     }
 }
