@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -12,28 +9,37 @@ using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    [TestFixture]
-    public class When_Comparing_Document_Type
+    public class ComparisonTestBase
     {
-        private UmbracoSupport support;
-        private Mock<IContentTypeService> contentTypeServiceMock;
-        private FluentContentTypeConfiguration config;
+        protected UmbracoSupport Support;
+        protected Mock<IContentTypeService> ContentTypeServiceMock;
+        protected FluentContentTypeConfiguration Config;
 
         [SetUp]
-        public void Setup()
+        protected void SetupBase()
         {
-            support = new UmbracoSupport();
-            support.SetupUmbraco();
-            contentTypeServiceMock = Mock.Get(support.ServiceContext.ContentTypeService);
-            config = new FluentContentTypeConfiguration(support.ServiceContext);
+            Support = new UmbracoSupport();
+            Support.SetupUmbraco();
+
+            ContentTypeServiceMock = Mock.Get(Support.ServiceContext.ContentTypeService);
+            Config = new FluentContentTypeConfiguration(Support.ServiceContext);
         }
 
         [TearDown]
-        public void TearDown()
+        protected void TearDownBase()
         {
-            support.DisposeUmbraco();
+            Support.DisposeUmbraco();
         }
 
+        protected void StubContentType(string contentTypeAlias, IContentType contentType)
+        {
+            ContentTypeServiceMock.Setup(t => t.GetContentType(contentTypeAlias)).Returns(contentType);
+        }
+    }
+
+    [TestFixture]
+    public class When_Comparing_Document_Type : ComparisonTestBase
+    {
         [Test]
         public void For_Existing_Then_Is_Not_New()
         {
@@ -46,36 +52,20 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             When_Umbraco_Has_Document_Type(null, Has.Property("IsNew").True);
         }
 
-        [Test]
-        public void Then_Determines_If_Property_Exists()
-        {
-            var contentType = Mock.Of<IContentType>();
-            StubContentType("contentType", contentType);
-            contentType.PropertyGroups = new PropertyGroupCollection(new List<PropertyGroup>());
-            var tab = new PropertyGroup() {Name = "tab"};
-            contentType.PropertyGroups.Add(tab);
-            tab.PropertyTypes.Add(new PropertyType("editor.alias", DataTypeDatabaseType.Ntext) {Alias="richtext"});
 
-            Assert.Inconclusive("Barely checked that the above can be done in unit test");
-        }
 
         private void When_Umbraco_Has_Document_Type(IContentType contentType, Constraint constraint)
         {
             var alias = "contentType";
             StubContentType(alias, contentType);
-            config.ContentType(alias);
-            var diffgram = config.Compare();
+            Config.ContentType(alias);
+            var diffgram = Config.Compare();
             Assert.That(diffgram.DocumentTypes[alias], constraint);
-        }
-
-        private void StubContentType(string contentTypeAlias, IContentType contentType)
-        {
-            contentTypeServiceMock.Setup(t => t.GetContentType(contentTypeAlias)).Returns(contentType);
         }
 
         public void SampleUsage()
         {
-            var config = new FluentContentTypeConfiguration(support.ServiceContext);
+            var config = new FluentContentTypeConfiguration(Support.ServiceContext);
 
             config.DataType("richtext")
                 .PropertyEditor("Umbraco.TinyMCEv3")
@@ -94,6 +84,80 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
             if (diffgram.Safe)
                 config.Ensure(diffgram);
+        }
+    }
+
+    [TestFixture]
+    public class When_Comparing_Tab : ComparisonTestBase
+    {
+        private IContentType contentType;
+
+        [SetUp]
+        public void Setup()
+        {
+            contentType = Mock.Of<IContentType>();
+            StubContentType("contentType", contentType);
+            contentType.PropertyGroups = new PropertyGroupCollection(new List<PropertyGroup>());
+
+            Config.ContentType("contentType")
+                .Tab("tab");
+        }
+
+        [Test]
+        public void For_Existing_Then_Is_Not_New()
+        {
+            contentType.PropertyGroups.Add(new PropertyGroup() {Name = "tab"});
+
+            var diffgram = Config.Compare();
+
+            Assert.That(diffgram.DocumentTypes["contentType"].Tabs["tab"], Has.Property("IsNew").False);
+        }
+
+        [Test]
+        public void For_Unknown_Then_Is_New()
+        {
+            var diffgram = Config.Compare();
+
+            Assert.That(diffgram.DocumentTypes["contentType"].Tabs["tab"], Has.Property("IsNew").True);
+        }
+    }
+
+    [TestFixture]
+    public class When_Comparing_Property : ComparisonTestBase
+    {
+        private IContentType contentType;
+
+        [SetUp]
+        public void Setup()
+        {
+            contentType = Mock.Of<IContentType>();
+            StubContentType("contentType", contentType);
+            contentType.PropertyGroups = new PropertyGroupCollection(new List<PropertyGroup>());
+
+            Config.ContentType("contentType")
+                .Tab("tab")
+                    .Property("richtext");
+
+        }
+
+        [Test]
+        public void For_Existing_Then_Is_Not_New()
+        {
+            var tab = new PropertyGroup() { Name = "tab" };
+            contentType.PropertyGroups.Add(tab);
+            tab.PropertyTypes.Add(new PropertyType("editor.alias", DataTypeDatabaseType.Ntext) { Alias = "richtext" });
+
+            var diffgram = Config.Compare();
+
+            Assert.That(diffgram.DocumentTypes["contentType"].Tabs["tab"].Properties["richtext"], Has.Property("IsNew").False);
+        }
+
+        [Test]
+        public void For_Unknown_Then_Is_New()
+        {
+            var diffgram = Config.Compare();
+
+            Assert.That(diffgram.DocumentTypes["contentType"].Tabs["tab"].Properties["richtext"], Has.Property("IsNew").True);
         }
     }
 
@@ -133,17 +197,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public void Ensure(Diffgram diffgram)
         {
-        }
-    }
 
-    public class DocumentTypeDiffgram
-    {
-        public string Alias { get; }
-        public bool IsNew { get; set; }
-
-        public DocumentTypeDiffgram(string @alias)
-        {
-            Alias = alias;
         }
     }
 
@@ -152,11 +206,13 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         private readonly FluentContentTypeConfiguration configuration;
         private readonly ServiceContext serviceContext;
         private readonly Dictionary<string, DocumentTypeDiffgram> docTypes;
+        private IContentTypeService contentTypeService;
 
         public Diffgram(FluentContentTypeConfiguration configuration, ServiceContext serviceContext)
         {
             this.configuration = configuration;
             this.serviceContext = serviceContext;
+            contentTypeService = serviceContext.ContentTypeService;
 
             docTypes = new Dictionary<string, DocumentTypeDiffgram>();
         }
@@ -169,31 +225,125 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             foreach (var docType in configuration.DocumentTypes)
             {
-                var contentTypeService = serviceContext.ContentTypeService;
-                var umbContentType = contentTypeService.GetContentType(docType.Key);
-                var docTypeDiff = AddDocumentType(docType.Key);
-                docTypeDiff.IsNew = umbContentType == null;
+                var docTypeDiff = AddDocumentType(docType.Value);
+                docTypeDiff.Compare();
+
+
             }
 
         }
 
-        private DocumentTypeDiffgram AddDocumentType(string alias)
+        private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfiguration docTypeConfig)
         {
-            var docTypeDiffgram = new DocumentTypeDiffgram(alias);
-            docTypes.Add(alias, docTypeDiffgram);
+            var docTypeDiffgram = new DocumentTypeDiffgram(docTypeConfig, contentTypeService);
+            docTypes.Add(docTypeConfig.Alias, docTypeDiffgram);
             return docTypeDiffgram;
+        }
+    }
+
+    public class DocumentTypeDiffgram
+    {
+        private readonly IContentTypeService contentTypeService;
+        private readonly DocumentTypeConfiguration configuration;
+        public string Alias => configuration.Alias;
+        public bool IsNew { get; set; }
+        public Dictionary<string, TabDiffgram> Tabs { get; }
+
+        public DocumentTypeDiffgram(DocumentTypeConfiguration configuration, IContentTypeService contentTypeService)
+        {
+            this.contentTypeService = contentTypeService;
+            this.configuration = configuration;
+            Tabs = new Dictionary<string, TabDiffgram>();
+        }
+
+        public void Compare()
+        {
+            var umbContentType = contentTypeService.GetContentType(configuration.Alias);
+
+            IsNew = umbContentType == null;
+
+            foreach (var tab in configuration.Tabs.Values)
+            {
+                var tabDiff = new TabDiffgram(tab, umbContentType.PropertyGroups);
+                Tabs.Add(tabDiff.Name, tabDiff);
+                tabDiff.Compare();
+            }
+        }
+    }
+
+    public class TabDiffgram
+    {
+        private readonly TabConfiguration config;
+        private readonly PropertyGroupCollection propertyGroups;
+        public string Name => config.Name;
+        public Dictionary<string, PropertyTypeDiffgram> Properties { get; }
+
+        public bool IsNew { get; private set; }
+
+        public TabDiffgram(TabConfiguration config, PropertyGroupCollection propertyGroups)
+        {
+            this.config = config;
+            this.propertyGroups = propertyGroups;
+            Properties = new Dictionary<string, PropertyTypeDiffgram>();
+        }
+
+        public void Compare()
+        {
+            var group = propertyGroups.FirstOrDefault(g => g.Name == config.Name);
+
+            IsNew = group == null;
+
+            foreach (var property in config.Properties.Values)
+            {
+                var propDiff = new PropertyTypeDiffgram(property, group?.PropertyTypes ?? new PropertyTypeCollection(new PropertyType[0]));
+                Properties.Add(property.Alias, propDiff);
+                propDiff.Compare();
+            }
+        }
+    }
+
+    public class PropertyTypeDiffgram
+    {
+        private readonly PropertyConfiguration config;
+        private readonly PropertyTypeCollection propertyCollection;
+
+        public bool IsNew { get; private set; }
+
+        public PropertyTypeDiffgram(PropertyConfiguration config, PropertyTypeCollection propertyCollection)
+        {
+            this.config = config;
+            this.propertyCollection = propertyCollection;
+        }
+
+        public void Compare()
+        {
+            var existing = propertyCollection.SingleOrDefault(p => p.Alias == config.Alias);
+
+            IsNew = existing == null;
+
+            if (!IsNew)
+            {
+                // ...
+            }
         }
     }
 
     public class DocumentTypeConfiguration
     {
+        public string Alias { get; }
+        public Dictionary<string, TabConfiguration> Tabs { get; private set; }
+
         public DocumentTypeConfiguration(FluentContentTypeConfiguration parent, string @alias)
         {
+            Alias = alias;
+            Tabs = new Dictionary<string, TabConfiguration>();
         }
 
         public TabConfiguration Tab(string tabName)
         {
-            return new TabConfiguration(this, tabName);
+            var tab = new TabConfiguration(this, tabName);
+            Tabs.Add(tab.Name, tab);
+            return tab;
         }
     }
 
@@ -201,11 +351,18 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     {
         public TabConfiguration(DocumentTypeConfiguration parent, string tabName)
         {
+            Properties = new Dictionary<string, PropertyConfiguration>();
+            Name = tabName;
         }
+
+        public Dictionary<string, PropertyConfiguration> Properties { get; }
+        public string Name { get; private set; }
 
         public PropertyConfiguration Property(string alias)
         {
-            return new PropertyConfiguration(this, alias);
+            var property = new PropertyConfiguration(this, alias);
+            Properties.Add(property.Alias, property);
+            return property;
         }
     }
 
@@ -216,7 +373,10 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         public PropertyConfiguration(TabConfiguration parent, string @alias)
         {
             this.parent = parent;
+            Alias = @alias;
         }
+
+        public string Alias { get; }
 
         public PropertyConfiguration DisplayName(string displayName)
         {
