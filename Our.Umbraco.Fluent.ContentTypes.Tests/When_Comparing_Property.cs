@@ -38,7 +38,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void For_Existing_Then_Is_Not_New()
         {
-            var propertyDiff  = RichTextDiffgram();
+            var propertyDiff = RichTextDiffgram();
 
             Assert.That(propertyDiff, Has.Property("IsNew").False);
         }
@@ -141,7 +141,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 {
                     DataTypeDefinitionId = 5,
                     Alias = "richtext",
-                    Name ="Rich text",
+                    Name = "Rich text",
                     Description = "Write rich content here"
                 });
         }

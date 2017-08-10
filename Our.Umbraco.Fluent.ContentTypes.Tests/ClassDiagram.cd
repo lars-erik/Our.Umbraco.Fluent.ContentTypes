@@ -8,7 +8,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.Diffgram">
-    <Position X="15.25" Y="1" Width="1.5" />
+    <Position X="15.5" Y="2.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -33,7 +33,7 @@
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeConfigurator">
     <Position X="5" Y="1.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIgAAAAAAAEAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIgAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
       <FileName>DocumentTypeConfigurator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -42,12 +42,11 @@
     <ShowAsCollectionAssociation>
       <Property Name="Tabs" />
     </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeDiffgram">
-    <Position X="11.75" Y="1.5" Width="2.25" />
+    <Position X="11.75" Y="3" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAgAAAAAQAAAAAAAAIAAAAAEAAAABAAAAAAAg=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAACACAAAIAAAAAEAAAAAAAAgAAAg=</HashCode>
       <FileName>DocumentTypeDiffgram.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -93,12 +92,11 @@
       <Field Name="parent" />
       <Property Name="Configuration" />
     </ShowAsAssociation>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyTypeDiffgram">
-    <Position X="11.75" Y="6" Width="2.25" />
+    <Position X="11.75" Y="7.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAgQAAAAAAAAIAAAAAAAAAABAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgQAIAACAAAIAAAAAAAAAAAAAAgAAAA=</HashCode>
       <FileName>PropertyTypeDiffgram.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -131,17 +129,13 @@
     <ShowAsCollectionAssociation>
       <Property Name="Properties" />
     </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.TabDiffgram">
-    <Position X="14.5" Y="3.75" Width="1.5" />
+    <Position X="14.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAgAgAAAAAAAAAAAQAAACAAAAAAEBAAEACAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAACAAAAAIAAAAAAAAAAAAAEACAAA=</HashCode>
       <FileName>TabDiffgram.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="configuration" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Properties" />
     </ShowAsCollectionAssociation>
@@ -149,6 +143,16 @@
   <Class Name="Umbraco.Core.Services.ServiceContext" Collapsed="true">
     <Position X="5" Y="0.5" Width="1.5" />
     <TypeIdentifier />
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.EntityDiffgram&lt;TConfiguration, TEntity&gt;">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAQBACACABAIACAAAAAAgEBAAAgAAAA=</HashCode>
+      <FileName>EntityDiffgram.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

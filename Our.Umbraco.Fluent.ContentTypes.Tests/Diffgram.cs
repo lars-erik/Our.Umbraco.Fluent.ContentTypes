@@ -27,18 +27,16 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             foreach (var docType in configuration.DocumentTypes)
             {
-                var docTypeDiff = AddDocumentType(docType.Value);
+                DocumentTypeConfigurator docTypeConfig = docType.Value;
+                var docTypeDiff = AddDocumentType(docTypeConfig.Configuration);
                 docTypeDiff.Compare();
-
-
             }
-
         }
 
-        private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfigurator docTypeConfig)
+        private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfiguration documentTypeConfiguration)
         {
-            var docTypeDiffgram = new DocumentTypeDiffgram(docTypeConfig, serviceContext);
-            docTypes.Add(docTypeConfig.Alias, docTypeDiffgram);
+            var docTypeDiffgram = new DocumentTypeDiffgram(documentTypeConfiguration, serviceContext);
+            docTypes.Add(documentTypeConfiguration.Alias, docTypeDiffgram);
             return docTypeDiffgram;
         }
     }

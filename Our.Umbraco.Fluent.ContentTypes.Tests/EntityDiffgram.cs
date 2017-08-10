@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
@@ -6,7 +8,6 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     {
         protected readonly ServiceContext ServiceContext;
         protected readonly TConfiguration Configuration;
-        protected readonly IConfigurator<TConfiguration> Configurator;
         protected TEntity Existing;
 
         public bool IsNew { get; protected set; }
@@ -15,10 +16,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public abstract string Key { get; }
 
-        protected EntityDiffgram(IConfigurator<TConfiguration> configurator, ServiceContext serviceContext)
+        protected EntityDiffgram(TConfiguration configuration, ServiceContext serviceContext)
         {
-            Configurator = configurator;
-            Configuration = configurator.Configuration;
+            Configuration = configuration;
             ServiceContext = serviceContext;
         }
 
@@ -35,8 +35,15 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 return;
             }
 
-            if (!IsNew)
+            if (IsNew)
+            {
+                IsModified = false;
+                IsUnsafe = false;
+            }
+            else
+            {
                 CompareToExisting();
+            }
 
             CompareChildren();
         }
@@ -52,8 +59,28 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         protected virtual void CompareToExisting()
         {
-            IsModified = false;
-            IsUnsafe = false;
+            var modified = false;
+            var targetProperties = typeof(TEntity).GetProperties();
+            foreach (var property in typeof(TConfiguration).GetProperties())
+            {
+                var targetProp = targetProperties.FirstOrDefault(p => p.Name == property.Name);
+                if (targetProp != null)
+                { 
+                    var sourceValue = property.GetValue(Configuration);
+                    var targetValue = targetProp?.GetValue(Existing);
+                    if (sourceValue == null)
+                    {
+                        modified |= targetValue != null;
+                    }
+                    else
+                    {
+                        modified |= !sourceValue.Equals(targetValue);
+                    }
+                }
+            }
+
+            IsModified = modified;
+            IsUnsafe = IsModified;
         }
     }
 }

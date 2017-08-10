@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core.Models;
@@ -5,38 +6,32 @@ using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public class TabDiffgram
+    public class TabDiffgram : EntityDiffgram<TabConfiguration, PropertyGroup>
     {
-        private readonly TabConfigurator configurator;
         private readonly PropertyGroupCollection propertyGroups;
-        private readonly ServiceContext serviceContext;
-        private readonly TabConfiguration configuration;
-        public string Name => configuration.Name;
+        public override string Key => Configuration.Name;
         public Dictionary<string, PropertyTypeDiffgram> Properties { get; }
 
-        public bool IsNew { get; private set; }
-
-        public TabDiffgram(TabConfigurator configurator, PropertyGroupCollection propertyGroups, ServiceContext serviceContext)
+        public TabDiffgram(TabConfiguration configuration, PropertyGroupCollection propertyGroups, ServiceContext serviceContext)
+            : base(configuration, serviceContext)
         {
-            this.configurator = configurator;
-            this.configuration = configurator.Configuration;
             this.propertyGroups = propertyGroups;
-            this.serviceContext = serviceContext;
             Properties = new Dictionary<string, PropertyTypeDiffgram>();
         }
 
-        public void Compare()
+        protected override PropertyGroup FindExisting()
         {
-            var group = propertyGroups?.FirstOrDefault(g => g.Name == configuration.Name);
+            return propertyGroups?.FirstOrDefault(g => g.Name == Configuration.Name);
+        }
 
-            IsNew = group == null;
-
-            foreach (var property in configurator.Properties.Values)
+        protected override void CompareChildren()
+        {
+            foreach (var property in Configuration.Properties.Values)
             {
                 var propDiff = new PropertyTypeDiffgram(
                     property, 
-                    group?.PropertyTypes,
-                    serviceContext
+                    Existing?.PropertyTypes,
+                    ServiceContext
                 );
                 Properties.Add(property.Alias, propDiff);
                 propDiff.Compare();

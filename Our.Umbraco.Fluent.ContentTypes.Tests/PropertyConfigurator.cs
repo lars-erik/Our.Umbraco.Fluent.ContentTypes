@@ -1,6 +1,6 @@
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public class PropertyConfigurator : IConfigurator<PropertyConfiguration>
+    public class PropertyConfigurator
     {
         private readonly TabConfigurator parent;
 
@@ -18,7 +18,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public PropertyConfigurator DisplayName(string displayName)
         {
-            Configuration.DisplayName = displayName;
+            Configuration.Name = displayName;
             return this;
         }
 
@@ -43,7 +43,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     public class PropertyConfiguration
     {
         public string Alias { get; }
-        public string DisplayName { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         public string DataType { get; set; }
 

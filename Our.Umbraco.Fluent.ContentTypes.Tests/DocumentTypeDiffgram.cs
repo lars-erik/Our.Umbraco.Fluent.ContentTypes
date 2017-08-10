@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
@@ -6,17 +7,16 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
     public class DocumentTypeDiffgram : EntityDiffgram<DocumentTypeConfiguration, IContentType>
     {
-        private readonly DocumentTypeConfigurator configurator;
+        //private readonly DocumentTypeConfigurator configurator;
         private readonly IContentTypeService contentTypeService;
 
         public override string Key => Configuration.Alias;
         public Dictionary<string, TabDiffgram> Tabs { get; }
 
-        public DocumentTypeDiffgram(DocumentTypeConfigurator configurator, ServiceContext serviceContext)
-            : base(configurator, serviceContext)
+        public DocumentTypeDiffgram(DocumentTypeConfiguration configuration, ServiceContext serviceContext)
+            : base(configuration, serviceContext)
         {
-            this.configurator = configurator;
-            this.contentTypeService = serviceContext.ContentTypeService;
+            contentTypeService = serviceContext.ContentTypeService;
             Tabs = new Dictionary<string, TabDiffgram>();
         }
 
@@ -31,10 +31,10 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         protected override void CompareChildren()
         {
-            foreach (var tab in configurator.Tabs.Values)
+            foreach (var tab in Configuration.Tabs.Values)
             {
                 var tabDiff = new TabDiffgram(tab, Existing?.PropertyGroups, ServiceContext);
-                Tabs.Add(tabDiff.Name, tabDiff);
+                Tabs.Add(tabDiff.Key, tabDiff);
                 tabDiff.Compare();
             }
         }

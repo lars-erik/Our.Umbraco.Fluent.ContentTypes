@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public class TabConfigurator : IConfigurator<TabConfiguration>
+    public class TabConfigurator
     {
         private readonly DocumentTypeConfigurator parent;
         public TabConfiguration Configuration { get; private set; }

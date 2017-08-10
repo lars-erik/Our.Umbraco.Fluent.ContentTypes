@@ -3,25 +3,10 @@ using System.Linq;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
-    public interface IConfigurator<out TConfiguration>
-    {
-        TConfiguration Configuration { get; }
-    }
-
-    public interface IConfiguratorWithChildren<out TConfiguration, TChildren> : IConfigurator<TConfiguration>
-    {
-        Dictionary<string, IConfigurator<TChildren>> Children { get; }
-    }
-
-    public class DocumentTypeConfigurator : IConfiguratorWithChildren<DocumentTypeConfiguration, TabConfiguration>
+    public class DocumentTypeConfigurator
     {
         public DocumentTypeConfiguration Configuration { get; }
         public Dictionary<string, TabConfigurator> Tabs { get; private set; }
-
-        public Dictionary<string, IConfigurator<TabConfiguration>> Children
-        {
-            get { return Tabs.Values.Cast<IConfigurator<TabConfiguration>>().ToDictionary(t => t.Configuration.Name); }
-        }
 
         public string Alias => Configuration.Alias;
 

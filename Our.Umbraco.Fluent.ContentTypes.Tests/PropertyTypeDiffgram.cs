@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models;
@@ -12,8 +13,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public override string Key => Configuration.Alias;
 
-        public PropertyTypeDiffgram(PropertyConfigurator configurator, PropertyTypeCollection propertyCollection, ServiceContext serviceContext)
-            : base(configurator, serviceContext)
+        public PropertyTypeDiffgram(PropertyConfiguration configuration, PropertyTypeCollection propertyCollection, ServiceContext serviceContext)
+            : base(configuration, serviceContext)
         {
             this.propertyCollection = propertyCollection;
         }
@@ -27,10 +28,12 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         protected override void CompareToExisting()
         {
-            IsUnsafe = IsModified =
-                !Configuration.DisplayName.InvariantEquals(Existing.Name) ||
-                !Configuration.Description.InvariantEquals(Existing.Description) ||
-                dataTypeDefinition.Id != Existing.DataTypeDefinitionId;
+            base.CompareToExisting();
+
+            if (!IsModified)
+            {
+                IsModified = IsUnsafe = dataTypeDefinition.Id != Existing.DataTypeDefinitionId;
+            }
         }
 
         protected override PropertyType FindExisting()
