@@ -277,9 +277,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComparisonTestBase.cs" />
+    <Compile Include="DataTypeConfiguration.cs" />
+    <Compile Include="Diffgram.cs" />
+    <Compile Include="DocumentTypeConfigurator.cs" />
+    <Compile Include="DocumentTypeDiffgram.cs" />
+    <Compile Include="FluentContentTypeConfiguration.cs" />
+    <Compile Include="PropertyConfigurator.cs" />
+    <Compile Include="PropertyTypeDiffgram.cs" />
     <Compile Include="Support\UmbracoSupport.cs" />
+    <Compile Include="TabConfigurator.cs" />
+    <Compile Include="TabDiffgram.cs" />
     <Compile Include="When_Comparing_Document_Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="When_Comparing_Property.cs" />
+    <Compile Include="When_Comparing_Tab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
