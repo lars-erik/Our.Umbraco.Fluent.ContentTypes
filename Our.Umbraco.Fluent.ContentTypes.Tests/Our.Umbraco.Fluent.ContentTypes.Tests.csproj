@@ -295,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ClassDiagram.cd" />
     <None Include="Configurations\DashboardSettings\Dashboard.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

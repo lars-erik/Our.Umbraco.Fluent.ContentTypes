@@ -9,6 +9,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         private readonly IContentTypeService contentTypeService;
         private readonly DocumentTypeConfigurator configurator;
         private readonly ServiceContext serviceContext;
+        private DocumentTypeConfiguration configuration;
         public string Alias => configurator.Alias;
         public bool IsNew { get; set; }
         public Dictionary<string, TabDiffgram> Tabs { get; }
@@ -17,6 +18,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             this.contentTypeService = serviceContext.ContentTypeService;
             this.configurator = configurator;
+            this.configuration = configurator.Configuration;
             this.serviceContext = serviceContext;
             Tabs = new Dictionary<string, TabDiffgram>();
         }

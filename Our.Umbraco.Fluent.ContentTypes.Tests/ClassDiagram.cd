@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DataTypeConfiguration" Collapsed="true">
+    <Position X="1.75" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataTypeConfiguration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.Diffgram">
+    <Position X="15.25" Y="1.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AgAAAIAAAAgAAAEAAAAAAAAAAAiAAAAAAABAAAAAAAg=</HashCode>
+      <FileName>Diffgram.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="DocumentTypes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeConfiguration">
+    <Position X="8.25" Y="1.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>DocumentTypeConfigurator.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tabs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeConfigurator">
+    <Position X="5" Y="1.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIgAAAAAAAAAAAAAAAAAEAAgAAAAAAAAAA=</HashCode>
+      <FileName>DocumentTypeConfigurator.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Configuration" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tabs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.DocumentTypeDiffgram">
+    <Position X="11.75" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAoAAAAAAAAAAAAAAACAAEAAAEBAAAAAAAg=</HashCode>
+      <FileName>DocumentTypeDiffgram.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="configuration" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Tabs" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.FluentContentTypeConfiguration">
+    <Position X="0.75" Y="1.5" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AgAAAAIAAAoAAAAAAAAAAAAAAAAAAAQAAABQAAAAAAA=</HashCode>
+      <FileName>FluentContentTypeConfiguration.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="serviceContext" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="DocumentTypes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyConfiguration">
+    <Position X="8.25" Y="6" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PropertyConfigurator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyConfigurator">
+    <Position X="5" Y="6" Width="2.5" />
+    <AssociationLine Name="parent" Type="Our.Umbraco.Fluent.ContentTypes.Tests.TabConfigurator" FixedFromPoint="true">
+      <Path>
+        <Point X="6.75" Y="6" />
+        <Point X="6.75" Y="5.046" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAIgAABAAAAAAAAAAAAAAAAAgAAAAQAAAAA=</HashCode>
+      <FileName>PropertyConfigurator.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="parent" />
+      <Property Name="Configuration" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyTypeDiffgram">
+    <Position X="11.75" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAgAAgAAAAAAABAAAAAAAAAAAEBAAAAAAAA=</HashCode>
+      <FileName>PropertyTypeDiffgram.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="config" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.TabConfiguration">
+    <Position X="8.25" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>TabConfigurator.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Properties" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.TabConfigurator">
+    <Position X="5" Y="3.75" Width="2.5" />
+    <AssociationLine Name="Properties" Type="Our.Umbraco.Fluent.ContentTypes.Tests.PropertyConfigurator" FixedToPoint="true">
+      <Path>
+        <Point X="5.688" Y="5.046" />
+        <Point X="5.688" Y="6" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAgAAAAQACAAA=</HashCode>
+      <FileName>TabConfigurator.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="parent" />
+      <Property Name="Configuration" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Properties" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Our.Umbraco.Fluent.ContentTypes.Tests.TabDiffgram">
+    <Position X="14.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAgAAAAAAAAAAAQAAACAAAAAAEBAAEACAAA=</HashCode>
+      <FileName>TabDiffgram.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="configuration" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Properties" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Umbraco.Core.Services.ServiceContext" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
