@@ -37,7 +37,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfigurator docTypeConfig)
         {
-            var docTypeDiffgram = new DocumentTypeDiffgram(docTypeConfig, contentTypeService);
+            var docTypeDiffgram = new DocumentTypeDiffgram(docTypeConfig, serviceContext);
             docTypes.Add(docTypeConfig.Alias, docTypeDiffgram);
             return docTypeDiffgram;
         }

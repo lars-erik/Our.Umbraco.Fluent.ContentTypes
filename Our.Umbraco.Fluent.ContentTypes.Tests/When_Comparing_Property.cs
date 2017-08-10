@@ -11,6 +11,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         private IContentType contentType;
         private PropertyGroup tab;
         private PropertyConfigurator richTextConfig;
+        private IDataTypeDefinition dataTypeDefinition;
 
         [SetUp]
         public void Setup()
@@ -20,6 +21,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             contentType.PropertyGroups = new PropertyGroupCollection(new List<PropertyGroup>());
             tab = new PropertyGroup() { Name = "tab" };
             contentType.PropertyGroups.Add(tab);
+
+            dataTypeDefinition = StubDataType(5, "richtext");
+
             AddRichTextProperty();
 
             richTextConfig = Config
@@ -28,7 +32,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                         .Property("richtext")
                             .DisplayName("Rich text")
                             .Description("Write rich content here")
-                            .DataType("Umbraco.TinyMCEv3");
+                            .DataType("richtext");
         }
 
         [Test]
@@ -37,6 +41,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             var propertyDiff  = RichTextDiffgram();
 
             Assert.That(propertyDiff, Has.Property("IsNew").False);
+        }
+
+        [Test]
+        public void For_Equal_Existing_Then_Is_Not_Unsafe()
+        {
+            var propertyDiff  = RichTextDiffgram();
+
+            Assert.That(propertyDiff, Has.Property("IsUnsafe").False);
         }
 
         [Test]
@@ -60,8 +72,61 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         }
 
         [Test]
-        public void With_Different_Data_Type_Alias_Then_Is_Unsafe()
+        public void With_Different_Description_Then_Is_Unsafe()
         {
+            richTextConfig.Description("Another description");
+
+            var propertyDiff = RichTextDiffgram();
+
+            Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
+        }
+
+        [Test]
+        public void With_New_Compositions_Then_Is_Safe()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void With_NonExisting_Compositions_Then_Is_Unsafe()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void With_Compositions_In_Configuration_Then_Is_Safe()
+        {
+            Assert.Inconclusive("Need to build dependency graph :|");
+        }
+
+        [Test]
+        public void For_Orphan_Then_New_Parent_Is_Safe()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void With_New_Allowed_Children_Then_Is_Safe()
+        {
+            Assert.Inconclusive();
+        }
+
+
+
+        [Test]
+        public void With_Invalid_DataType_Is_Unsafe()
+        {
+            richTextConfig.DataType("NotTiny");
+
+            var propertyDiff = RichTextDiffgram();
+
+            Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
+        }
+
+        [Test]
+        public void With_Different_DataType_Is_Unsafe()
+        {
+            StubDataType(6, "NotTiny");
             richTextConfig.DataType("NotTiny");
 
             var propertyDiff = RichTextDiffgram();
@@ -71,7 +136,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         private void AddRichTextProperty()
         {
-            tab.PropertyTypes.Add(new PropertyType("Umbraco.TinyMCEv3", DataTypeDatabaseType.Ntext) {Alias = "richtext", Name="Rich text", Description = "Write rich content here" });
+            tab.PropertyTypes.Add(
+                new PropertyType(dataTypeDefinition)
+                {
+                    DataTypeDefinitionId = 5,
+                    Alias = "richtext",
+                    Name ="Rich text",
+                    Description = "Write rich content here"
+                });
         }
 
         private PropertyTypeDiffgram RichTextDiffgram()

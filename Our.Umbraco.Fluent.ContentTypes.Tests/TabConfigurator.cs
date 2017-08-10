@@ -13,13 +13,12 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Properties = new Dictionary<string, PropertyConfigurator>();
             Configuration = new TabConfiguration(tabName);
             parent.Configuration.Tabs.Add(tabName, Configuration);
+            parent.Tabs.Add(tabName, this);
         }
 
         public PropertyConfigurator Property(string alias)
         {
-            var property = new PropertyConfigurator(this, alias);
-            Properties.Add(property.Alias, property);
-            return property;
+            return new PropertyConfigurator(this, alias);
         }
     }
 
@@ -27,12 +26,12 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     {
         public string Name { get; private set; }
 
-        public Dictionary<string, object> Properties { get; private set; }
+        public Dictionary<string, PropertyConfiguration> Properties { get; private set; }
 
         public TabConfiguration(string name)
         {
             Name = name;
-            Properties = new Dictionary<string, object>();
+            Properties = new Dictionary<string, PropertyConfiguration>();
         }
     }
 }

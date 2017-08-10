@@ -4,27 +4,33 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     {
         private readonly TabConfigurator parent;
 
+        public PropertyConfiguration Configuration { get; private set; }
+
+        public string Alias => Configuration.Alias;
+
         public PropertyConfigurator(TabConfigurator parent, string @alias)
         {
             this.parent = parent;
             Configuration = new PropertyConfiguration(alias);
+            parent.Properties.Add(alias, this);
             parent.Configuration.Properties.Add(alias, Configuration);
         }
 
-        public PropertyConfiguration Configuration { get; private set; }
-
         public PropertyConfigurator DisplayName(string displayName)
         {
+            Configuration.DisplayName = displayName;
             return this;
         }
 
         public PropertyConfigurator Description(string description)
         {
+            Configuration.Description = description;
             return this;
         }
 
         public PropertyConfigurator DataType(string dataTypeAlias)
         {
+            Configuration.DataType = dataTypeAlias;
             return this;
         }
 
@@ -37,6 +43,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     public class PropertyConfiguration
     {
         public string Alias { get; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public string DataType { get; set; }
 
         public PropertyConfiguration(string @alias)
         {

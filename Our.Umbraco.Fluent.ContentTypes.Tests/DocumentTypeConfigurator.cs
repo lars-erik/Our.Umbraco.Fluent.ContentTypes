@@ -16,9 +16,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public TabConfigurator Tab(string tabName)
         {
-            var tab = new TabConfigurator(this, tabName);
-            Tabs.Add(tabName, tab);
-            return tab;
+            return new TabConfigurator(this, tabName);
         }
     }
 
@@ -30,6 +28,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         public DocumentTypeConfiguration(string alias)
         {
             Alias = alias;
+            Tabs = new Dictionary<string, TabConfiguration>();
         }
     }
 }
