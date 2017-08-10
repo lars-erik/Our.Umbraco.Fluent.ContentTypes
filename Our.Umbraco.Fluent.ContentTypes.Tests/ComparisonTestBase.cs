@@ -28,16 +28,23 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Support.DisposeUmbraco();
         }
 
-        protected void StubContentType(string contentTypeAlias)
+        protected IContentType StubContentType(int id, string contentTypeAlias)
         {
-            StubContentType(contentTypeAlias, Mock.Of<IContentType>());
+            var contentType = Mock.Of<IContentType>();
+            StubContentType(id, contentTypeAlias, contentType);
+            return contentType;
         }
 
-        protected void StubContentType(string contentTypeAlias, IContentType contentType)
+        protected IContentType StubContentType(int id, string contentTypeAlias, IContentType contentType)
         {
             if (contentType != null)
+            {
+                contentType.Id = id;
                 contentType.Alias = contentTypeAlias;
+            }
+            ContentTypeServiceMock.Setup(t => t.GetContentType(id)).Returns(contentType);
             ContentTypeServiceMock.Setup(t => t.GetContentType(contentTypeAlias)).Returns(contentType);
+            return contentType;
         }
 
         protected IDataTypeDefinition StubDataType(int id, string dataTypeName)

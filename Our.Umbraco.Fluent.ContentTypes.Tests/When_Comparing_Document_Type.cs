@@ -23,9 +23,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void With_New_Compositions_Of_Existing_DocumentTypes_Then_Is_Safe()
         {
-            StubContentType("contentType");
-            StubContentType("compositeA");
-            StubContentType("compositeB");
+            StubContentType(1, "contentType");
+            StubContentType(2, "compositeA");
+            StubContentType(3, "compositeB");
 
             Config.ContentType("contentType")
                 .Compositions("compositeA", "compositeB");
@@ -38,7 +38,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void With_NonExisting_Compositions_Then_Is_Unsafe()
         {
-            StubContentType("contentType", Mock.Of<IContentType>());
+            StubContentType(1, "contentType", Mock.Of<IContentType>());
 
             Config.ContentType("contentType")
                 .Compositions("compositeA", "compositeB");
@@ -59,15 +59,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void With_Compositions_In_Configuration_Then_Is_Safe()
         {
-            StubContentType("contentType", Mock.Of<IContentType>());
+            StubContentType(1, "contentType", Mock.Of<IContentType>());
 
             Config.ContentType("compositeA");
 
             Config.ContentType("contentType")
                 .Compositions("compositeA", "compositeB");
 
-            var fullDiff = Config.Compare();
-            var diff = fullDiff.DocumentTypes["contentType"];
+            var diff = ContentTypeDiff();
 
             Assert.That(
                 diff,
@@ -80,22 +79,98 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         }
 
         [Test]
-        public void For_Orphan_Then_New_Parent_Is_Safe()
+        public void For_New_Then_Existing_Parent_Is_Safe()
         {
-            Assert.Inconclusive();
+            StubContentType(2, "parent");
+
+            Config.ContentType("contentType")
+                .Parent("parent");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(diff.IsUnsafe, Is.False);
         }
 
         [Test]
-        public void With_New_Allowed_Children_Then_Is_Safe()
+        public void For_New_Then_Configured_Parent_Is_Safe()
+        {
+            Config
+                .ContentType("parent")
+                .ContentType("contentType")
+                    .Parent("parent");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(diff.IsUnsafe, Is.False);
+        }
+
+        [Test]
+        public void For_Parented_Then_Other_Parent_Is_Unsafe()
+        {
+            var type = StubContentType(1, "contentType");
+            StubContentType(2, "parent");
+            StubContentType(3, "otherParent");
+
+            type.ParentId = 2;
+
+            Config.ContentType("contentType")
+                .Parent("otherParent");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(diff.IsUnsafe, Is.True);
+        }
+
+        [Test]
+        public void For_Parented_Then_No_Parent_Is_Unsafe()
+        {
+            var type = StubContentType(1, "contentType");
+            StubContentType(2, "parent");
+            type.ParentId = 2;
+
+            Config.ContentType("contentType");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(diff.IsUnsafe, Is.True);
+        }
+
+        [Test]
+        public void For_Orphan_Then_New_Parent_Is_Safe()
+        {
+            StubContentType(1, "contentType");
+            StubContentType(2, "parent");
+
+            Config.ContentType("contentType")
+                .Parent("parent");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(
+                diff,
+                Has.Property("IsUnsafe").False &
+                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("Parent").And.Property("Result").EqualTo(ComparisonResult.New)
+                );
+        }
+
+        [Test]
+        public void With_New_Allowed_Children_Of_Existing_Types_Then_Is_Safe()
         {
             Assert.Inconclusive();
         }
 
+
+        private DocumentTypeDiffgram ContentTypeDiff()
+        {
+            var fullDiff = Config.Compare();
+            var diff = fullDiff.DocumentTypes["contentType"];
+            return diff;
+        }
 
         private void When_Umbraco_Has_Document_Type(IContentType contentType, Constraint constraint)
         {
             var alias = "contentType";
-            StubContentType(alias, contentType);
+            StubContentType(1, alias, contentType);
             Config.ContentType(alias);
             var diffgram = Config.Compare();
             Assert.That(diffgram.DocumentTypes[alias], constraint);

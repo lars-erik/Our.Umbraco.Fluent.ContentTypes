@@ -32,6 +32,50 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             base.CompareToExisting();
 
+            CompareCompositions();
+
+            var extParent = Existing.ParentId > 0
+                ? ServiceContext.ContentTypeService.GetContentType(Existing.ParentId)
+                : null;
+
+            var newParent = !String.IsNullOrEmpty(Configuration.Parent)
+                ? ServiceContext.ContentTypeService.GetContentType(Configuration.Parent)
+                : null;
+
+            if (extParent == null && newParent == null)
+            {
+                if (diffgram.DocumentTypes.Any(t => t.Key == Configuration.Parent))
+                {
+                    Comparisons.Add(new Comparison("Parent", ComparisonResult.New));
+                    IsModified = true;
+                }
+                else
+                {
+                    Comparisons.Add(new Comparison("Parent", ComparisonResult.Unchanged));
+                }
+            }
+            else
+            {
+                if (extParent == null)
+                {
+                    Comparisons.Add(new Comparison("Parent", ComparisonResult.New));
+                    IsModified = true;
+                }
+                else if (extParent.Alias != newParent?.Alias)
+                {
+                    Comparisons.Add(new Comparison("Parent", ComparisonResult.Invalid));
+                    IsModified = true;
+                    IsUnsafe = true;
+                }
+                else
+                {
+                    Comparisons.Add(new Comparison("Parent", ComparisonResult.Unchanged));
+                }
+            }
+        }
+
+        private void CompareCompositions()
+        {
             var existingCompositions = Existing.ContentTypeComposition.Select(c => c.Alias).ToArray();
             var matchingCompositions = Configuration.Compositions.Intersect(existingCompositions);
             var newCompositions = Configuration.Compositions.Except(existingCompositions).ToArray();
@@ -48,7 +92,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Comparisons.AddRange(invalidContentTypes.Select(c => new Comparison("Compositions", c, ComparisonResult.Invalid)));
 
             IsModified |= Comparisons.Any(c => c.Key == "Compositions" && c.Result != ComparisonResult.Unchanged);
-            IsUnsafe = Comparisons.Any(c => c.Key == "Compositions" && c.Result == ComparisonResult.Invalid);
+            IsUnsafe |= Comparisons.Any(c => c.Key == "Compositions" && c.Result == ComparisonResult.Invalid);
         }
 
         protected override void CompareChildren()

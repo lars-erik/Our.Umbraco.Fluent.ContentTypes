@@ -14,7 +14,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         public void Setup()
         {
             contentType = Mock.Of<IContentType>();
-            StubContentType("contentType", contentType);
+            StubContentType(1, "contentType", contentType);
             contentType.PropertyGroups = new PropertyGroupCollection(new List<PropertyGroup>());
 
             Config.ContentType("contentType")

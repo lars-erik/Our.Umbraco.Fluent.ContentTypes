@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
@@ -19,7 +20,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             docTypes = new Dictionary<string, DocumentTypeDiffgram>();
         }
 
-        public bool Safe { get; set; }
+        public bool Safe { get; private set; }
 
         public Dictionary<string, DocumentTypeDiffgram> DocumentTypes => docTypes;
 
@@ -31,6 +32,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 var docTypeDiff = AddDocumentType(docTypeConfig.Configuration);
                 docTypeDiff.Compare();
             }
+
+            Safe = docTypes.All(t => !t.Value.IsUnsafe);
         }
 
         private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfiguration documentTypeConfiguration)
