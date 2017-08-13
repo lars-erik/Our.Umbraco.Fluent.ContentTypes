@@ -160,14 +160,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(2, "child");
 
             Config.ContentType("contentType")
-                .Children("child");
+                .AllowedChildren("child");
 
             var diff = ContentTypeDiff();
 
             Assert.That(
                 diff, 
                 Has.Property("IsUnsafe").False &
-                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("Children").And.Property("Result").EqualTo(ComparisonResult.New));
+                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("AllowedChildren").And.Property("Result").EqualTo(ComparisonResult.New));
         }
 
         [Test]
@@ -176,14 +176,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(1, "contentType");
 
             Config.ContentType("contentType")
-                .Children("child");
+                .AllowedChildren("child");
 
             var diff = ContentTypeDiff();
 
             Assert.That(
                 diff, 
                 Has.Property("IsUnsafe").True &
-                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("Children").And.Property("Result").EqualTo(ComparisonResult.Invalid));
+                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("AllowedChildren").And.Property("Result").EqualTo(ComparisonResult.Invalid));
         }
 
 

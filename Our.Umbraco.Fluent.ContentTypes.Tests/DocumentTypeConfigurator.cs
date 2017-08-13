@@ -42,9 +42,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             return parent.ContentType(alias);
         }
 
-        public DocumentTypeConfigurator Children(params string[] children)
+        public DocumentTypeConfigurator AllowedChildren(params string[] children)
         {
-            Configuration.Children = Configuration.Children.Union(children).Distinct();
+            Configuration.AllowedChildren = Configuration.AllowedChildren.Union(children).Distinct();
             return this;
         }
     }
@@ -55,14 +55,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         public Dictionary<string, TabConfiguration> Tabs { get; private set; }
         public IEnumerable<string> Compositions { get; set; }
         public string Parent { get; set; }
-        public IEnumerable<string> Children { get; set; }
+        public IEnumerable<string> AllowedChildren { get; set; }
 
         public DocumentTypeConfiguration(string alias)
         {
             Alias = alias;
             Tabs = new Dictionary<string, TabConfiguration>();
             Compositions = new string[0];
-            Children = new string[0];
+            AllowedChildren = new string[0];
         }
     }
 }

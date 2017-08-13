@@ -34,9 +34,13 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
             CompareCompositions();
             CompareParent();
+            CompareAllowedChildren();
+        }
 
+        private void CompareAllowedChildren()
+        {
             var extChildren = Existing.AllowedContentTypes.Select(t => t.Alias).ToArray();
-            var newChildren = Configuration.Children.Except(extChildren).ToArray();
+            var newChildren = Configuration.AllowedChildren.Except(extChildren).ToArray();
 
             var validNewChildren = newChildren
                 .Where(c => ServiceContext.ContentTypeService.GetContentType(c) != null)
@@ -44,12 +48,13 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 .ToArray();
             var invalidNewChildren = newChildren.Except(validNewChildren);
 
-            Comparisons.AddRange(validNewChildren.Select(c => new Comparison("Children", c, ComparisonResult.New)));
-            Comparisons.AddRange(newChildren.Intersect(extChildren).Select(c => new Comparison("Children", c, ComparisonResult.Unchanged)));
-            Comparisons.AddRange(invalidNewChildren.Select(c => new Comparison("Children", c, ComparisonResult.Invalid)));
+            Comparisons.AddRange(validNewChildren.Select(c => new Comparison("AllowedChildren", c, ComparisonResult.New)));
+            Comparisons.AddRange(newChildren.Intersect(extChildren)
+                .Select(c => new Comparison("AllowedChildren", c, ComparisonResult.Unchanged)));
+            Comparisons.AddRange(invalidNewChildren.Select(c => new Comparison("AllowedChildren", c, ComparisonResult.Invalid)));
 
-            IsModified |= Comparisons.Any(c => c.Key == "Children" && c.Result != ComparisonResult.Unchanged);
-            IsUnsafe |= Comparisons.Any(c => c.Key == "Children" && c.Result == ComparisonResult.Invalid);
+            IsModified |= Comparisons.Any(c => c.Key == "AllowedChildren" && c.Result != ComparisonResult.Unchanged);
+            IsUnsafe |= Comparisons.Any(c => c.Key == "AllowedChildren" && c.Result == ComparisonResult.Invalid);
         }
 
         private void CompareParent()
