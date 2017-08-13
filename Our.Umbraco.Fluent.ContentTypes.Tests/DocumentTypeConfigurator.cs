@@ -27,7 +27,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         public DocumentTypeConfigurator Compositions(params string[] compositions)
         {
-            Configuration.Compositions = Configuration.Compositions.Union(compositions);
+            Configuration.Compositions = Configuration.Compositions.Union(compositions).Distinct();
             return this;
         }
 
@@ -41,6 +41,12 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             return parent.ContentType(alias);
         }
+
+        public DocumentTypeConfigurator Children(params string[] children)
+        {
+            Configuration.Children = Configuration.Children.Union(children).Distinct();
+            return this;
+        }
     }
 
     public class DocumentTypeConfiguration
@@ -49,12 +55,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         public Dictionary<string, TabConfiguration> Tabs { get; private set; }
         public IEnumerable<string> Compositions { get; set; }
         public string Parent { get; set; }
+        public IEnumerable<string> Children { get; set; }
 
         public DocumentTypeConfiguration(string alias)
         {
             Alias = alias;
             Tabs = new Dictionary<string, TabConfiguration>();
             Compositions = new string[0];
+            Children = new string[0];
         }
     }
 }

@@ -156,7 +156,18 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void With_New_Allowed_Children_Of_Existing_Types_Then_Is_Safe()
         {
-            Assert.Inconclusive();
+            StubContentType(1, "contentType");
+            StubContentType(2, "child");
+
+            Config.ContentType("contentType")
+                .Children("child");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(
+                diff, 
+                Has.Property("IsUnsafe").False &
+                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("Children").And.Property("Result").EqualTo(ComparisonResult.New));
         }
 
 

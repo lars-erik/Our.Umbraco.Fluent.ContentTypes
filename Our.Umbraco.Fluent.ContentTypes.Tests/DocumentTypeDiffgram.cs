@@ -33,7 +33,22 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             base.CompareToExisting();
 
             CompareCompositions();
+            CompareParent();
 
+            var extChildren = Existing.AllowedContentTypes.Select(t => t.Alias);
+            var newChildren = Configuration.Children.Except(extChildren).ToList();
+
+            var validNewChildren = newChildren
+                .Where(c => ServiceContext.ContentTypeService.GetContentType(c) != null)
+                .Union(newChildren.Where(c => diffgram.DocumentTypes.ContainsKey(c)));
+            var invalidNewChildren = newChildren.Except(validNewChildren);
+
+            Comparisons.AddRange(validNewChildren.Select(c => new Comparison("Children", c, ComparisonResult.New)));
+            Comparisons.AddRange(invalidNewChildren.Select(c => new Comparison("Children", c, ComparisonResult.Invalid)));
+        }
+
+        private void CompareParent()
+        {
             var extParent = Existing.ParentId > 0
                 ? ServiceContext.ContentTypeService.GetContentType(Existing.ParentId)
                 : null;
