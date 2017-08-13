@@ -170,6 +170,22 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("Children").And.Property("Result").EqualTo(ComparisonResult.New));
         }
 
+        [Test]
+        public void With_New_Allowed_Children_Of_Invalid_Types_Then_Is_UnSafe()
+        {
+            StubContentType(1, "contentType");
+
+            Config.ContentType("contentType")
+                .Children("child");
+
+            var diff = ContentTypeDiff();
+
+            Assert.That(
+                diff, 
+                Has.Property("IsUnsafe").True &
+                Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("Children").And.Property("Result").EqualTo(ComparisonResult.Invalid));
+        }
+
 
         private DocumentTypeDiffgram ContentTypeDiff()
         {

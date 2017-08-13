@@ -35,16 +35,21 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             CompareCompositions();
             CompareParent();
 
-            var extChildren = Existing.AllowedContentTypes.Select(t => t.Alias);
-            var newChildren = Configuration.Children.Except(extChildren).ToList();
+            var extChildren = Existing.AllowedContentTypes.Select(t => t.Alias).ToArray();
+            var newChildren = Configuration.Children.Except(extChildren).ToArray();
 
             var validNewChildren = newChildren
                 .Where(c => ServiceContext.ContentTypeService.GetContentType(c) != null)
-                .Union(newChildren.Where(c => diffgram.DocumentTypes.ContainsKey(c)));
+                .Union(newChildren.Where(c => diffgram.DocumentTypes.ContainsKey(c)))
+                .ToArray();
             var invalidNewChildren = newChildren.Except(validNewChildren);
 
             Comparisons.AddRange(validNewChildren.Select(c => new Comparison("Children", c, ComparisonResult.New)));
+            Comparisons.AddRange(newChildren.Intersect(extChildren).Select(c => new Comparison("Children", c, ComparisonResult.Unchanged)));
             Comparisons.AddRange(invalidNewChildren.Select(c => new Comparison("Children", c, ComparisonResult.Invalid)));
+
+            IsModified |= Comparisons.Any(c => c.Key == "Children" && c.Result != ComparisonResult.Unchanged);
+            IsUnsafe |= Comparisons.Any(c => c.Key == "Children" && c.Result == ComparisonResult.Invalid);
         }
 
         private void CompareParent()
