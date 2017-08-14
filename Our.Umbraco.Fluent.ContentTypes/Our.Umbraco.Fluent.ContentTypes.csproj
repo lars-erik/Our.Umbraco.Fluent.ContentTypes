@@ -266,7 +266,7 @@
   <ItemGroup>
     <Compile Include="Comparison.cs" />
     <Compile Include="ComparisonResult.cs" />
-    <Compile Include="DataTypeConfiguration.cs" />
+    <Compile Include="DataTypeConfigurator.cs" />
     <Compile Include="Diffgram.cs" />
     <Compile Include="DocumentTypeConfigurator.cs" />
     <Compile Include="DocumentTypeDiffgram.cs" />

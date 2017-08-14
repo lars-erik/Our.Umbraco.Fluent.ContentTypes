@@ -17,9 +17,9 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
         public Dictionary<string, DocumentTypeConfigurator> DocumentTypes => documentTypes;
 
-        public DataTypeConfiguration DataType(string name)
+        public DataTypeConfigurator DataType(string name)
         {
-            var dataTypeConfiguration = new DataTypeConfiguration(this, name);
+            var dataTypeConfiguration = new DataTypeConfigurator(this, name);
             return dataTypeConfiguration;
         }
 
