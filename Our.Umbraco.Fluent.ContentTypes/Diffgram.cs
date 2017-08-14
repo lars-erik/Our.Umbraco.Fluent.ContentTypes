@@ -9,6 +9,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
         private readonly FluentContentTypeConfiguration configuration;
         private readonly ServiceContext serviceContext;
         private readonly Dictionary<string, DocumentTypeDiffgram> docTypes;
+        private readonly Dictionary<string, DataTypeDiffgram> dataTypes;
         private IContentTypeService contentTypeService;
 
         public Diffgram(FluentContentTypeConfiguration configuration, ServiceContext serviceContext)
@@ -18,11 +19,13 @@ namespace Our.Umbraco.Fluent.ContentTypes
             contentTypeService = serviceContext.ContentTypeService;
 
             docTypes = new Dictionary<string, DocumentTypeDiffgram>();
+            dataTypes = new Dictionary<string, DataTypeDiffgram>();
         }
 
         public bool Safe { get; private set; }
 
         public Dictionary<string, DocumentTypeDiffgram> DocumentTypes => docTypes;
+        public Dictionary<string, DataTypeDiffgram> DataTypes => dataTypes;
 
         public void Compare()
         {
@@ -33,7 +36,22 @@ namespace Our.Umbraco.Fluent.ContentTypes
                 docTypeDiff.Compare();
             }
 
-            Safe = docTypes.All(t => !t.Value.IsUnsafe);
+            foreach (var dataTypes in configuration.DataTypes)
+            {
+                DataTypeConfigurator dataTypeConfig = dataTypes.Value;
+                var datatypeDiff = AddDataType(dataTypeConfig.Configuration);
+                datatypeDiff.Compare();
+            }
+
+            Safe = docTypes.All(t => !t.Value.IsUnsafe) 
+                && dataTypes.All(t => !t.Value.IsUnsafe);
+        }
+
+        private DataTypeDiffgram AddDataType(DataTypeConfiguration dataTypeConfiguration)
+        {
+            var datatypeDiffgram = new DataTypeDiffgram(this, dataTypeConfiguration, serviceContext);
+            dataTypes.Add(dataTypeConfiguration.Name, datatypeDiffgram);
+            return datatypeDiffgram;
         }
 
         private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfiguration documentTypeConfiguration)

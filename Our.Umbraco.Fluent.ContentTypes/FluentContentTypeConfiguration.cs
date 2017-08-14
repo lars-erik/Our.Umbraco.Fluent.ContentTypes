@@ -7,19 +7,23 @@ namespace Our.Umbraco.Fluent.ContentTypes
     {
         private readonly ServiceContext serviceContext;
         private readonly Dictionary<string, DocumentTypeConfigurator> documentTypes;
+        private readonly Dictionary<string, DataTypeConfigurator> dataTypes;
 
         public FluentContentTypeConfiguration(ServiceContext serviceContext)
         {
             this.serviceContext = serviceContext;
 
             documentTypes = new Dictionary<string, DocumentTypeConfigurator>();
+            dataTypes = new Dictionary<string, DataTypeConfigurator>();
         }
 
         public Dictionary<string, DocumentTypeConfigurator> DocumentTypes => documentTypes;
+        public Dictionary<string, DataTypeConfigurator> DataTypes => dataTypes;
 
         public DataTypeConfigurator DataType(string name)
         {
             var dataTypeConfiguration = new DataTypeConfigurator(this, name);
+            dataTypes.Add(name, dataTypeConfiguration);
             return dataTypeConfiguration;
         }
 

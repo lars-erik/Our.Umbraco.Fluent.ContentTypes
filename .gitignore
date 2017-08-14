@@ -243,3 +243,6 @@ ModelManifest.xml
 
 # Umbraco
 App_Data/
+
+# Approval Tests
+*.received.*
