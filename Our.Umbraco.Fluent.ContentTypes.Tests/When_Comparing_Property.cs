@@ -148,12 +148,4 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             return diffgram.DocumentTypes["contentType"].Tabs["tab"];
         }
     }
-
-    public enum ComparisonResult
-    {
-        Modified,
-        Unchanged,
-        Invalid,
-        New
-    }
 }

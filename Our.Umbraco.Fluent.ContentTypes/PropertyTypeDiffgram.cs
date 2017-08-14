@@ -2,7 +2,7 @@ using System.Linq;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
-namespace Our.Umbraco.Fluent.ContentTypes.Tests
+namespace Our.Umbraco.Fluent.ContentTypes
 {
     public class PropertyTypeDiffgram : EntityDiffgram<PropertyConfiguration, PropertyType>
     {

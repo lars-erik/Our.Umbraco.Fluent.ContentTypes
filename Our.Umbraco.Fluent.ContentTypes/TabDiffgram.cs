@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
-namespace Our.Umbraco.Fluent.ContentTypes.Tests
+namespace Our.Umbraco.Fluent.ContentTypes
 {
     public class TabDiffgram : EntityDiffgram<TabConfiguration, PropertyGroup>
     {

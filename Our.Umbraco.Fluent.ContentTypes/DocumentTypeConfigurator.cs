@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Our.Umbraco.Fluent.ContentTypes.Tests
+namespace Our.Umbraco.Fluent.ContentTypes
 {
     public class DocumentTypeConfigurator
     {

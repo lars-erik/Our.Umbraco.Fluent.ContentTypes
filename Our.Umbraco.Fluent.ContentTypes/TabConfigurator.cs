@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Our.Umbraco.Fluent.ContentTypes.Tests
+namespace Our.Umbraco.Fluent.ContentTypes
 {
     public class TabConfigurator
     {

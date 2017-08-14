@@ -1,6 +1,6 @@
 using Umbraco.Core.Models;
 
-namespace Our.Umbraco.Fluent.ContentTypes.Tests
+namespace Our.Umbraco.Fluent.ContentTypes
 {
     public class DataTypeConfiguration
     {
