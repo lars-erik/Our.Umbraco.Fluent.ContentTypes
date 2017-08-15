@@ -8,7 +8,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
     public abstract class EntityDiffgram<TConfiguration, TEntity>
     {
         protected readonly ServiceContext ServiceContext;
-        protected readonly TConfiguration Configuration;
+        public readonly TConfiguration Configuration;
         protected TEntity Existing;
 
         public bool IsNew { get; protected set; }
@@ -74,21 +74,26 @@ namespace Our.Umbraco.Fluent.ContentTypes
             var targetProperties = GetPublicProperties(typeof(TEntity));
             foreach (var property in typeof(TConfiguration).GetProperties())
             {
-                var thisModified = false;
-                var targetProp = targetProperties.FirstOrDefault(p => p.Name == property.Name);
-                if (targetProp != null && targetProp.PropertyType.IsAssignableFrom(property.PropertyType))
-                {
+                var thisModified = true;
+                var targetProps = targetProperties
+                    .Where(p => p.Name == property.Name && p.PropertyType.IsAssignableFrom(property.PropertyType))
+                    .ToArray();
+                foreach(var targetProp in targetProps)
+                { 
                     var sourceValue = property.GetValue(Configuration);
                     var targetValue = targetProp?.GetValue(Existing);
-                    if (sourceValue == null)
-                        thisModified = targetValue != null;
-                    else
-                        thisModified = !sourceValue.Equals(targetValue);
 
-                    Comparisons.Add(new Comparison(property.Name, thisModified ? ComparisonResult.Modified : ComparisonResult.Unchanged));
+                    if ((sourceValue != null && sourceValue.Equals(targetValue)) || (sourceValue == null && targetValue == null))
+                    {
+                        thisModified = false;
+                        break;
+                    }
                 }
-
-                modified |= thisModified;
+                if (targetProps.Any())
+                { 
+                    Comparisons.Add(new Comparison(property.Name, thisModified ? ComparisonResult.Modified : ComparisonResult.Unchanged));
+                    modified |= thisModified;
+                }
             }
             return modified;
         }

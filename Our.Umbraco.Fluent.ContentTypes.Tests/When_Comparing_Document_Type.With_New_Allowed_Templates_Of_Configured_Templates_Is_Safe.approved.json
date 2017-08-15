@@ -1,10 +1,50 @@
 ﻿{
+    "Configuration": {
+        "Alias": "contentType",
+        "Tabs": {},
+        "Compositions": [],
+        "Parent": null,
+        "AllowedChildren": [],
+        "AllowedTemplates": [
+            "template"
+        ],
+        "Name": null,
+        "Icon": null,
+        "Description": null,
+        "AllowedAsRoot": false,
+        "IsListView": false
+    },
     "Key": "contentType",
     "Tabs": {},
     "IsNew": false,
     "IsModified": true,
     "IsUnsafe": false,
     "Comparisons": [
+        {
+            "Key": "Alias",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "Name",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "Icon",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "Description",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "AllowedAsRoot",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
         {
             "Key": "Parent",
             "Result": "Unchanged",

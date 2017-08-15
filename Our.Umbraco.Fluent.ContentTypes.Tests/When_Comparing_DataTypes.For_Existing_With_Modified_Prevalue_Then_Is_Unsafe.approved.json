@@ -1,9 +1,27 @@
 ﻿{
+    "Configuration": {
+        "Name": "Nested Content Definition",
+        "PropertyEditorAlias": "Our.Umbraco.NestedContent",
+        "DatabaseType": "Ntext",
+        "Prevalues": {
+            "contentTypes": "[\r\n                  {\r\n                    \"ncAlias\": \"thisCantBeValidatedForNow\",\r\n                    \"ncTabAlias\": \"The tab to use\",\r\n                    \"nameTemplate\": \"{{someFieldNotValidatedEither}}\"\r\n                  }\r\n                ]",
+            "minItems": "0",
+            "maxItems": "0",
+            "confirmDeletes": "1",
+            "showIcons": "1",
+            "hideLabel": ""
+        }
+    },
     "Key": "Nested Content Definition",
     "IsNew": false,
     "IsModified": true,
     "IsUnsafe": true,
     "Comparisons": [
+        {
+            "Key": "Name",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
         {
             "Key": "PropertyEditorAlias",
             "Result": "Unchanged",

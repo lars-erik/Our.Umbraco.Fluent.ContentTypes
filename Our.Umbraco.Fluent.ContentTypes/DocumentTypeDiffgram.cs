@@ -104,13 +104,14 @@ namespace Our.Umbraco.Fluent.ContentTypes
         private void CompareCompositions()
         {
             var existingCompositions = Existing.ContentTypeComposition.Select(c => c.Alias).ToArray();
-            var matchingCompositions = Configuration.Compositions.Intersect(existingCompositions);
+            var matchingCompositions = Configuration.Compositions.Intersect(existingCompositions).ToArray();
             var newCompositions = Configuration.Compositions.Except(existingCompositions).ToArray();
             var validNewContentTypes = newCompositions
                 .Select(alias => ServiceContext.ContentTypeService.GetContentType(alias)?.Alias)
                 .Where(alias => alias != null)
                 .Union(diffgram.DocumentTypes.Select(t => t.Key).Intersect(Configuration.Compositions))
                 .Distinct()
+                .Except(matchingCompositions)
                 .ToArray();
             var invalidContentTypes = newCompositions.Except(validNewContentTypes);
 
@@ -125,13 +126,15 @@ namespace Our.Umbraco.Fluent.ContentTypes
         private void CompareAllowedTemplates()
         {
             var existingTemplates = Existing.AllowedTemplates.Select(t => t.Alias).ToArray();
-            var matchingTemplates = Configuration.AllowedTemplates.Intersect(existingTemplates);
+            var matchingTemplates = Configuration.AllowedTemplates.Intersect(existingTemplates).ToArray();
             var newTemplates = Configuration.AllowedTemplates.Except(existingTemplates).ToArray();
             var validNewTemplates = newTemplates
                 .Select(alias => ServiceContext.FileService.GetTemplate(alias)?.Alias)
                 .Where(alias => alias != null)
                 .Union(diffgram.Templates.Select(t => t.Key).Intersect(Configuration.AllowedTemplates))
                 .Distinct()
+                // TODO: Test both configured and existing dependency, also for compositions.
+                .Except(matchingTemplates)
                 .ToArray();
             var invalidTemplates = newTemplates.Except(validNewTemplates);
 

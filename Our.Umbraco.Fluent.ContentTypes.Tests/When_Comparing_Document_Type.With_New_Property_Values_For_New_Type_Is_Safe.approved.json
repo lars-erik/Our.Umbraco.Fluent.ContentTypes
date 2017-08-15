@@ -1,1 +1,47 @@
-﻿ 
+﻿{
+    "Configuration": {
+        "Alias": "contentType",
+        "Tabs": {},
+        "Compositions": [],
+        "Parent": null,
+        "AllowedChildren": [],
+        "AllowedTemplates": [],
+        "Name": "Content type",
+        "Icon": "icon-shopping-basket",
+        "Description": "A nice description",
+        "AllowedAsRoot": false,
+        "IsListView": false
+    },
+    "Key": "contentType",
+    "Tabs": {},
+    "IsNew": true,
+    "IsModified": false,
+    "IsUnsafe": false,
+    "Comparisons": [
+        {
+            "Key": "Alias",
+            "Result": "New",
+            "Discriminator": null
+        },
+        {
+            "Key": "Name",
+            "Result": "New",
+            "Discriminator": null
+        },
+        {
+            "Key": "Icon",
+            "Result": "New",
+            "Discriminator": null
+        },
+        {
+            "Key": "Description",
+            "Result": "New",
+            "Discriminator": null
+        },
+        {
+            "Key": "AllowedAsRoot",
+            "Result": "New",
+            "Discriminator": null
+        }
+    ]
+}

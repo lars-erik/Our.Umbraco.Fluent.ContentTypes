@@ -51,7 +51,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             var definition = Mock.Of<IDataTypeDefinition>();
             definition.Id = id;
-            definition.Name = "RichText";
+            definition.Name = dataTypeName;
             Mock.Get(Support.ServiceContext.DataTypeService).Setup(s => s.GetDataTypeDefinitionByName(dataTypeName)).Returns(definition);
             return definition;
         }

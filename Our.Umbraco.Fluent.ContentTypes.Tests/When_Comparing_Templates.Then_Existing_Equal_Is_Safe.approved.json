@@ -4,6 +4,10 @@
     "DataTypes": {},
     "Templates": {
         "fancy": {
+            "Configuration": {
+                "Alias": "fancy",
+                "Name": "Fancy template"
+            },
             "Key": "fancy",
             "IsNew": false,
             "IsModified": false,

@@ -46,12 +46,17 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
         private static Comparison CreateExistingComparison(KeyValuePair<string, string> kvp, IDictionary<string, PreValue> prevalues)
         {
-            var extPreValue = prevalues.ContainsKey(kvp.Key) ? prevalues[kvp.Key] : null;
+            var extPreValue = prevalues.ContainsKey(kvp.Key) ? prevalues[kvp.Key].Value : null;
+            var value = kvp.Value;
 
-            if (extPreValue == null)
+            // TODO: Test nullish values
+            extPreValue = String.IsNullOrWhiteSpace(extPreValue) ? null : extPreValue;
+            value = String.IsNullOrWhiteSpace(value) ? null : value;
+
+            if (value != null && extPreValue == null)
                 return new Comparison("Prevalues", kvp.Key, ComparisonResult.New);
 
-            if (extPreValue.Value != kvp.Value)
+            if (extPreValue != value)
                 return new Comparison("Prevalues", kvp.Key, ComparisonResult.Modified);
 
             return new Comparison("Prevalues", kvp.Key, ComparisonResult.Unchanged);
