@@ -33,6 +33,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                             .DisplayName("Rich text")
                             .Description("Write rich content here")
                             .DataType("richtext");
+
+            // TODO: Sort order
+            // TODO: Mandatory
         }
 
         [Test]
