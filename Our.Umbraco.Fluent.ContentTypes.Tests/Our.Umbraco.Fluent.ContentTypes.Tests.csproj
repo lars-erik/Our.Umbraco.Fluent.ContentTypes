@@ -298,6 +298,7 @@
     <Compile Include="When_Comparing_Property.cs" />
     <Compile Include="When_Comparing_Tab.cs" />
     <Compile Include="When_Comparing_Templates.cs" />
+    <Compile Include="When_Ensuring_DataTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

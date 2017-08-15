@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes
@@ -52,7 +54,35 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
         public void Ensure(Diffgram diffgram)
         {
+            foreach (var datatypeDiff in diffgram.DataTypes.Values)
+            {
+                IDataTypeDefinition datatype;
+                var datatypeConfig = datatypeDiff.Configuration;
 
+                var newPrevalueComparisons = datatypeDiff
+                    .Comparisons
+                    .Where(comparison => comparison.Key == "Prevalues" && comparison.Result == ComparisonResult.New)
+                    .Select(comparison => comparison.Discriminator);
+                var newPrevaluePairs = datatypeConfig.Prevalues.Where(kvp => newPrevalueComparisons.Contains(kvp.Key));
+                var newPrevalues = newPrevaluePairs.ToDictionary(kvp => kvp.Key, kvp => new PreValue(kvp.Value));
+
+                if (datatypeDiff.IsNew)
+                {
+                    datatype = new DataTypeDefinition(datatypeConfig.PropertyEditorAlias)
+                    {
+                        Name = datatypeConfig.Name,
+                        DatabaseType = datatypeConfig.DatabaseType
+                    };
+                    serviceContext.DataTypeService.SaveDataTypeAndPreValues(datatype, newPrevalues);
+                }
+                else
+                {
+                    datatype = serviceContext.DataTypeService.GetDataTypeDefinitionByName(datatypeDiff.Key);
+                    var extPrevalues = serviceContext.DataTypeService.GetPreValuesCollectionByDataTypeId(datatype.Id);
+                    newPrevalues = extPrevalues.PreValuesAsDictionary.Union(newPrevalues).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                    serviceContext.DataTypeService.SavePreValues(datatype, newPrevalues);
+                }
+            }
         }
     }
 }
