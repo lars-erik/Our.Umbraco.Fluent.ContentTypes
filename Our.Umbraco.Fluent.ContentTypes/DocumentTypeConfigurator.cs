@@ -53,6 +53,36 @@ namespace Our.Umbraco.Fluent.ContentTypes
             Configuration.AllowedTemplates = Configuration.AllowedTemplates.Union(templates).Distinct();
             return this;
         }
+
+        public DocumentTypeConfigurator Name(string name)
+        {
+            Configuration.Name = name;
+            return this;
+        }
+
+        public DocumentTypeConfigurator Icon(string icon)
+        {
+            Configuration.Icon = icon;
+            return this;
+        }
+
+        public DocumentTypeConfigurator Description(string description)
+        {
+            Configuration.Description = description;
+            return this;
+        }
+
+        public DocumentTypeConfigurator AllowedAsRoot(bool allowAtRoot)
+        {
+            Configuration.AllowedAsRoot = allowAtRoot;
+            return this;
+        }
+
+        public DocumentTypeConfigurator IsListView(bool isListView)
+        {
+            Configuration.IsListView = isListView;
+            return this;
+        }
     }
 
     public class DocumentTypeConfiguration
@@ -63,6 +93,11 @@ namespace Our.Umbraco.Fluent.ContentTypes
         public string Parent { get; set; }
         public IEnumerable<string> AllowedChildren { get; set; }
         public IEnumerable<string> AllowedTemplates { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public string Description { get; set; }
+        public bool AllowedAsRoot { get; set; }
+        public bool IsListView { get; set; }
 
         public DocumentTypeConfiguration(string alias)
         {

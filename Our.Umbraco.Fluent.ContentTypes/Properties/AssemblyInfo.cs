@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Our.Umbraco.Fluent.ContentTypes")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Fluent configuration of Umbraco metadata")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Our.Umbraco.Fluent.ContentTypes")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © 2017 Lars-Erik Aabech")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.1.*")]
-[assembly: AssemblyInformationalVersion("0.1.0-alpha1")]
+[assembly: AssemblyInformationalVersion("0.1.0-alpha2")]

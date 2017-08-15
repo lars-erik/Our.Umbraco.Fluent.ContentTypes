@@ -23,6 +23,20 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         }
 
         [Test]
+        public void With_New_Property_Values_For_New_Type_Is_Safe()
+        {
+            Config.ContentType("contentType")
+                .Name("Content type")
+                .Icon("icon-shopping-basket")
+                .Description("A nice description")
+                .AllowedAsRoot(false);
+            // TODO: .IsListView(false);
+            // TODO: Default template
+
+            Config.Compare().DocumentTypes["contentType"].Verify();;
+        }
+
+        [Test]
         public void With_New_Compositions_Of_Existing_DocumentTypes_Then_Is_Safe()
         {
             StubContentType(1, "contentType");
