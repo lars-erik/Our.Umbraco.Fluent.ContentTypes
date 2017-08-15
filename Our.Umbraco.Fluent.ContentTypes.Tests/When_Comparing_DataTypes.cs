@@ -82,15 +82,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         private void VerifyDiffgram()
         {
-            var diffgram = Config.Compare();
-
-            Approvals.VerifyJson(JsonConvert.SerializeObject(diffgram, new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter>
-                {
-                    new StringEnumConverter()
-                }
-            }));
+            Config.Compare().DataTypes[DataTypeName].Verify();
         }
     }
 }

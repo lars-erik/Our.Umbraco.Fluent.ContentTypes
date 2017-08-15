@@ -8,6 +8,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
         private readonly ServiceContext serviceContext;
         private readonly Dictionary<string, DocumentTypeConfigurator> documentTypes;
         private readonly Dictionary<string, DataTypeConfigurator> dataTypes;
+        private readonly Dictionary<string, TemplateConfigurator> templates;
 
         public FluentContentTypeConfiguration(ServiceContext serviceContext)
         {
@@ -15,10 +16,12 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
             documentTypes = new Dictionary<string, DocumentTypeConfigurator>();
             dataTypes = new Dictionary<string, DataTypeConfigurator>();
+            templates = new Dictionary<string, TemplateConfigurator>();
         }
 
         public Dictionary<string, DocumentTypeConfigurator> DocumentTypes => documentTypes;
         public Dictionary<string, DataTypeConfigurator> DataTypes => dataTypes;
+        public Dictionary<string, TemplateConfigurator> Templates => templates;
 
         public DataTypeConfigurator DataType(string name)
         {
@@ -32,6 +35,13 @@ namespace Our.Umbraco.Fluent.ContentTypes
             var documentTypeConfiguration = new DocumentTypeConfigurator(this, alias);
             documentTypes.Add(alias, documentTypeConfiguration);
             return documentTypeConfiguration;
+        }
+
+        public TemplateConfigurator Template(string alias)
+        {
+            var configurator = new TemplateConfigurator(this, alias);
+            templates.Add(alias, configurator);
+            return configurator;
         }
 
         public Diffgram Compare()

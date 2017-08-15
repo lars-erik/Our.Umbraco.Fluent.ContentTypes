@@ -1,54 +1,48 @@
 ﻿{
-    "Safe": false,
-    "DocumentTypes": {},
-    "DataTypes": {
-        "Nested Content Definition": {
-            "Key": "Nested Content Definition",
-            "IsNew": false,
-            "IsModified": true,
-            "IsUnsafe": true,
-            "Comparisons": [
-                {
-                    "Key": "PropertyEditorAlias",
-                    "Result": "Unchanged",
-                    "Discriminator": null
-                },
-                {
-                    "Key": "DatabaseType",
-                    "Result": "Unchanged",
-                    "Discriminator": null
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "Unchanged",
-                    "Discriminator": "contentTypes"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "Unchanged",
-                    "Discriminator": "minItems"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "Modified",
-                    "Discriminator": "maxItems"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "Unchanged",
-                    "Discriminator": "confirmDeletes"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "Unchanged",
-                    "Discriminator": "showIcons"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "Unchanged",
-                    "Discriminator": "hideLabel"
-                }
-            ]
+    "Key": "Nested Content Definition",
+    "IsNew": false,
+    "IsModified": true,
+    "IsUnsafe": true,
+    "Comparisons": [
+        {
+            "Key": "PropertyEditorAlias",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "DatabaseType",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "Unchanged",
+            "Discriminator": "contentTypes"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "Unchanged",
+            "Discriminator": "minItems"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "Modified",
+            "Discriminator": "maxItems"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "Unchanged",
+            "Discriminator": "confirmDeletes"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "Unchanged",
+            "Discriminator": "showIcons"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "Unchanged",
+            "Discriminator": "hideLabel"
         }
-    }
+    ]
 }

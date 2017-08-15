@@ -8,9 +8,15 @@ namespace Our.Umbraco.Fluent.ContentTypes
     {
         private readonly FluentContentTypeConfiguration configuration;
         private readonly ServiceContext serviceContext;
-        private readonly Dictionary<string, DocumentTypeDiffgram> docTypes;
-        private readonly Dictionary<string, DataTypeDiffgram> dataTypes;
         private IContentTypeService contentTypeService;
+
+        public bool Safe { get; private set; }
+
+        public Dictionary<string, DocumentTypeDiffgram> DocumentTypes { get; }
+
+        public Dictionary<string, DataTypeDiffgram> DataTypes { get; }
+
+        public Dictionary<string, TemplateDiffgram> Templates { get; }
 
         public Diffgram(FluentContentTypeConfiguration configuration, ServiceContext serviceContext)
         {
@@ -18,46 +24,54 @@ namespace Our.Umbraco.Fluent.ContentTypes
             this.serviceContext = serviceContext;
             contentTypeService = serviceContext.ContentTypeService;
 
-            docTypes = new Dictionary<string, DocumentTypeDiffgram>();
-            dataTypes = new Dictionary<string, DataTypeDiffgram>();
+            DocumentTypes = new Dictionary<string, DocumentTypeDiffgram>();
+            DataTypes = new Dictionary<string, DataTypeDiffgram>();
+            Templates = new Dictionary<string, TemplateDiffgram>();
         }
-
-        public bool Safe { get; private set; }
-
-        public Dictionary<string, DocumentTypeDiffgram> DocumentTypes => docTypes;
-        public Dictionary<string, DataTypeDiffgram> DataTypes => dataTypes;
 
         public void Compare()
         {
-            foreach (var docType in configuration.DocumentTypes)
+            foreach (var docType in configuration.DocumentTypes.Values)
             {
-                DocumentTypeConfigurator docTypeConfig = docType.Value;
-                var docTypeDiff = AddDocumentType(docTypeConfig.Configuration);
+                var docTypeDiff = AddDocumentType(docType.Configuration);
                 docTypeDiff.Compare();
             }
 
-            foreach (var dataTypes in configuration.DataTypes)
+            foreach (var dataType in configuration.DataTypes.Values)
             {
-                DataTypeConfigurator dataTypeConfig = dataTypes.Value;
-                var datatypeDiff = AddDataType(dataTypeConfig.Configuration);
+                var datatypeDiff = AddDataType(dataType.Configuration);
                 datatypeDiff.Compare();
             }
 
-            Safe = docTypes.All(t => !t.Value.IsUnsafe) 
-                && dataTypes.All(t => !t.Value.IsUnsafe);
+            foreach (var template in configuration.Templates.Values)
+            {
+                var templateDiff = AddTemplate(template.Configuration);
+                templateDiff.Compare();
+            }
+
+            Safe = DocumentTypes.All(t => !t.Value.IsUnsafe) 
+                && DataTypes.All(t => !t.Value.IsUnsafe)
+                && Templates.All(t => !t.Value.IsUnsafe);
+        }
+
+        private TemplateDiffgram AddTemplate(TemplateConfiguration templateConfiguration)
+        {
+            var templateDiffgram = new TemplateDiffgram(this, templateConfiguration, serviceContext);
+            Templates.Add(templateConfiguration.Alias, templateDiffgram);
+            return templateDiffgram;
         }
 
         private DataTypeDiffgram AddDataType(DataTypeConfiguration dataTypeConfiguration)
         {
             var datatypeDiffgram = new DataTypeDiffgram(this, dataTypeConfiguration, serviceContext);
-            dataTypes.Add(dataTypeConfiguration.Name, datatypeDiffgram);
+            DataTypes.Add(dataTypeConfiguration.Name, datatypeDiffgram);
             return datatypeDiffgram;
         }
 
         private DocumentTypeDiffgram AddDocumentType(DocumentTypeConfiguration documentTypeConfiguration)
         {
             var docTypeDiffgram = new DocumentTypeDiffgram(this, documentTypeConfiguration, serviceContext);
-            docTypes.Add(documentTypeConfiguration.Alias, docTypeDiffgram);
+            DocumentTypes.Add(documentTypeConfiguration.Alias, docTypeDiffgram);
             return docTypeDiffgram;
         }
     }

@@ -1,44 +1,48 @@
 ﻿{
-    "Safe": true,
-    "DocumentTypes": {},
-    "DataTypes": {
-        "Nested Content Definition": {
-            "Key": "Nested Content Definition",
-            "IsNew": true,
-            "IsModified": true,
-            "IsUnsafe": false,
-            "Comparisons": [
-                {
-                    "Key": "Prevalues",
-                    "Result": "New",
-                    "Discriminator": "contentTypes"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "New",
-                    "Discriminator": "minItems"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "New",
-                    "Discriminator": "maxItems"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "New",
-                    "Discriminator": "confirmDeletes"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "New",
-                    "Discriminator": "showIcons"
-                },
-                {
-                    "Key": "Prevalues",
-                    "Result": "New",
-                    "Discriminator": "hideLabel"
-                }
-            ]
+    "Key": "Nested Content Definition",
+    "IsNew": true,
+    "IsModified": true,
+    "IsUnsafe": false,
+    "Comparisons": [
+        {
+            "Key": "PropertyEditorAlias",
+            "Result": "New",
+            "Discriminator": null
+        },
+        {
+            "Key": "DatabaseType",
+            "Result": "New",
+            "Discriminator": null
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "New",
+            "Discriminator": "contentTypes"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "New",
+            "Discriminator": "minItems"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "New",
+            "Discriminator": "maxItems"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "New",
+            "Discriminator": "confirmDeletes"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "New",
+            "Discriminator": "showIcons"
+        },
+        {
+            "Key": "Prevalues",
+            "Result": "New",
+            "Discriminator": "hideLabel"
         }
-    }
+    ]
 }

@@ -279,6 +279,8 @@
     <Compile Include="PropertyTypeDiffgram.cs" />
     <Compile Include="TabConfigurator.cs" />
     <Compile Include="TabDiffgram.cs" />
+    <Compile Include="TemplateConfigurator.cs" />
+    <Compile Include="TemplateDiffgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

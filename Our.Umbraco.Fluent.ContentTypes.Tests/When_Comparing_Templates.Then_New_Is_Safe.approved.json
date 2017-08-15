@@ -1,0 +1,25 @@
+﻿{
+    "Safe": true,
+    "DocumentTypes": {},
+    "DataTypes": {},
+    "Templates": {
+        "fancy": {
+            "Key": "fancy",
+            "IsNew": true,
+            "IsModified": false,
+            "IsUnsafe": false,
+            "Comparisons": [
+                {
+                    "Key": "Alias",
+                    "Result": "New",
+                    "Discriminator": null
+                },
+                {
+                    "Key": "Name",
+                    "Result": "New",
+                    "Discriminator": null
+                }
+            ]
+        }
+    }
+}

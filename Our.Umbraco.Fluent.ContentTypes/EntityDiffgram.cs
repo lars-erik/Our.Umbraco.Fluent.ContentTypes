@@ -40,8 +40,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
             if (IsNew)
             {
-                IsModified = false;
-                IsUnsafe = false;
+                CreatePropertyComparisonsForNew();
             }
             else
             {
@@ -91,6 +90,19 @@ namespace Our.Umbraco.Fluent.ContentTypes
                 modified |= thisModified;
             }
             return modified;
+        }
+
+        private void CreatePropertyComparisonsForNew()
+        {
+            var targetProperties = typeof(TEntity).GetProperties();
+            foreach (var property in typeof(TConfiguration).GetProperties())
+            {
+                var targetProp = targetProperties.FirstOrDefault(p => p.Name == property.Name);
+                if (targetProp != null)
+                    Comparisons.Add(new Comparison(property.Name, ComparisonResult.New));
+            }
+            IsModified = false;
+            IsUnsafe = false;
         }
 
         protected virtual bool DetermineIsUnsafe()
