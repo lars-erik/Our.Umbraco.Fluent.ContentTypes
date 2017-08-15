@@ -1,0 +1,19 @@
+﻿{
+    "Key": "contentType",
+    "Tabs": {},
+    "IsNew": false,
+    "IsModified": true,
+    "IsUnsafe": false,
+    "Comparisons": [
+        {
+            "Key": "Parent",
+            "Result": "Unchanged",
+            "Discriminator": null
+        },
+        {
+            "Key": "AllowedTemplates",
+            "Result": "New",
+            "Discriminator": "template"
+        }
+    ]
+}

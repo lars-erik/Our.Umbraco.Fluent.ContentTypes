@@ -47,6 +47,12 @@ namespace Our.Umbraco.Fluent.ContentTypes
             Configuration.AllowedChildren = Configuration.AllowedChildren.Union(children).Distinct();
             return this;
         }
+
+        public DocumentTypeConfigurator AllowedTemplates(params string[] templates)
+        {
+            Configuration.AllowedTemplates = Configuration.AllowedTemplates.Union(templates).Distinct();
+            return this;
+        }
     }
 
     public class DocumentTypeConfiguration
@@ -56,6 +62,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
         public IEnumerable<string> Compositions { get; set; }
         public string Parent { get; set; }
         public IEnumerable<string> AllowedChildren { get; set; }
+        public IEnumerable<string> AllowedTemplates { get; set; }
 
         public DocumentTypeConfiguration(string alias)
         {
@@ -63,6 +70,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
             Tabs = new Dictionary<string, TabConfiguration>();
             Compositions = new string[0];
             AllowedChildren = new string[0];
+            AllowedTemplates = new string[0];
         }
     }
 }

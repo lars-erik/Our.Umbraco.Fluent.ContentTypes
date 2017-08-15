@@ -31,12 +31,6 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
         public void Compare()
         {
-            foreach (var docType in configuration.DocumentTypes.Values)
-            {
-                var docTypeDiff = AddDocumentType(docType.Configuration);
-                docTypeDiff.Compare();
-            }
-
             foreach (var dataType in configuration.DataTypes.Values)
             {
                 var datatypeDiff = AddDataType(dataType.Configuration);
@@ -47,6 +41,12 @@ namespace Our.Umbraco.Fluent.ContentTypes
             {
                 var templateDiff = AddTemplate(template.Configuration);
                 templateDiff.Compare();
+            }
+
+            foreach (var docType in configuration.DocumentTypes.Values)
+            {
+                var docTypeDiff = AddDocumentType(docType.Configuration);
+                docTypeDiff.Compare();
             }
 
             Safe = DocumentTypes.All(t => !t.Value.IsUnsafe) 

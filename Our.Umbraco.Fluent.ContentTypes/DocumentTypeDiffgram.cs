@@ -35,6 +35,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
             CompareCompositions();
             CompareParent();
             CompareAllowedChildren();
+            CompareAllowedTemplates();
         }
 
         private void CompareAllowedChildren()
@@ -99,6 +100,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
             }
         }
 
+        // TODO: Generalize string list comparisons
         private void CompareCompositions()
         {
             var existingCompositions = Existing.ContentTypeComposition.Select(c => c.Alias).ToArray();
@@ -118,6 +120,27 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
             IsModified |= Comparisons.Any(c => c.Key == "Compositions" && c.Result != ComparisonResult.Unchanged);
             IsUnsafe |= Comparisons.Any(c => c.Key == "Compositions" && c.Result == ComparisonResult.Invalid);
+        }
+
+        private void CompareAllowedTemplates()
+        {
+            var existingTemplates = Existing.AllowedTemplates.Select(t => t.Alias).ToArray();
+            var matchingTemplates = Configuration.AllowedTemplates.Intersect(existingTemplates);
+            var newTemplates = Configuration.AllowedTemplates.Except(existingTemplates).ToArray();
+            var validNewTemplates = newTemplates
+                .Select(alias => ServiceContext.FileService.GetTemplate(alias)?.Alias)
+                .Where(alias => alias != null)
+                .Union(diffgram.Templates.Select(t => t.Key).Intersect(Configuration.AllowedTemplates))
+                .Distinct()
+                .ToArray();
+            var invalidTemplates = newTemplates.Except(validNewTemplates);
+
+            Comparisons.AddRange(matchingTemplates.Select(c => new Comparison("AllowedTemplates", c, ComparisonResult.Unchanged)));
+            Comparisons.AddRange(validNewTemplates.Select(c => new Comparison("AllowedTemplates", c, ComparisonResult.New)));
+            Comparisons.AddRange(invalidTemplates.Select(c => new Comparison("AllowedTemplates", c, ComparisonResult.Invalid)));
+
+            IsModified |= Comparisons.Any(c => c.Key == "AllowedTemplates" && c.Result != ComparisonResult.Unchanged);
+            IsUnsafe |= Comparisons.Any(c => c.Key == "AllowedTemplates" && c.Result == ComparisonResult.Invalid);
         }
 
         protected override void CompareChildren()

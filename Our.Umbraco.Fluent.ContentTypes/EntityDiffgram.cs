@@ -75,7 +75,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
             {
                 var thisModified = false;
                 var targetProp = targetProperties.FirstOrDefault(p => p.Name == property.Name);
-                if (targetProp != null)
+                if (targetProp != null && targetProp.PropertyType.IsAssignableFrom(property.PropertyType))
                 {
                     var sourceValue = property.GetValue(Configuration);
                     var targetValue = targetProp?.GetValue(Existing);

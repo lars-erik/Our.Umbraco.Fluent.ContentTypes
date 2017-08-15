@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using ApprovalTests.Reporters;
+using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using Umbraco.Core.Models;
@@ -6,6 +7,7 @@ using Umbraco.Core.Models;
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
     [TestFixture]
+    [UseReporter(typeof(VisualStudioReporter))]
     public class When_Comparing_Document_Type : ComparisonTestBase
     {
         [Test]
@@ -186,6 +188,30 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("AllowedChildren").And.Property("Result").EqualTo(ComparisonResult.Invalid));
         }
 
+        [Test]
+        public void With_New_Allowed_Templates_Of_Existing_Templates_Is_Safe()
+        {
+            StubContentType(1, "contentType");
+            StubTemplate("template");
+
+            Config.ContentType("contentType")
+                .AllowedTemplates("template");
+
+            Config.Compare().DocumentTypes["contentType"].Verify();
+        }
+
+        [Test]
+        public void With_New_Allowed_Templates_Of_Configured_Templates_Is_Safe()
+        {
+            StubContentType(1, "contentType");
+
+            Config.Template("template");
+
+            Config.ContentType("contentType")
+                .AllowedTemplates("template");
+
+            Config.Compare().DocumentTypes["contentType"].Verify();
+        }
 
         private DocumentTypeDiffgram ContentTypeDiff()
         {
@@ -201,6 +227,14 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Config.ContentType(alias);
             var diffgram = Config.Compare();
             Assert.That(diffgram.DocumentTypes[alias], constraint);
+        }
+
+        private ITemplate StubTemplate(string alias)
+        {
+            var template = Mock.Of<ITemplate>();
+            Mock.Get(template).Setup(t => t.Alias).Returns(alias);
+            Mock.Get(Support.ServiceContext.FileService).Setup(t => t.GetTemplate(alias)).Returns(template);
+            return template;
         }
 
         public void SampleUsage()

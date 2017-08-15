@@ -318,6 +318,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="When_Comparing_DataTypes.For_Existing_Equal_Then_Is_Safe.approved.json" />
+    <None Include="When_Comparing_DataTypes.For_Existing_With_Modified_Prevalue_Then_Is_Unsafe.approved.json" />
+    <None Include="When_Comparing_DataTypes.For_New_Then_Is_Safe.approved.json" />
+    <None Include="When_Comparing_Document_Type.With_New_Allowed_Templates_Of_Configured_Templates_Is_Safe.approved.json" />
+    <None Include="When_Comparing_Document_Type.With_New_Allowed_Templates_Of_Existing_Templates_Is_Safe.approved.json" />
+    <None Include="When_Comparing_Templates.Then_Existing_Equal_Is_Safe.approved.json" />
+    <None Include="When_Comparing_Templates.Then_Existing_Modified_Is_Unsafe.approved.json" />
+    <None Include="When_Comparing_Templates.Then_New_Is_Safe.approved.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Our.Umbraco.Fluent.ContentTypes\Our.Umbraco.Fluent.ContentTypes.csproj">
