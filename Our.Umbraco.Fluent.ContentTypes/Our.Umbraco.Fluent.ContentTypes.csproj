@@ -270,6 +270,7 @@
     <Compile Include="DataTypeConfigurator.cs" />
     <Compile Include="DataTypeDiffgram.cs" />
     <Compile Include="DataTypeEnsurer.cs" />
+    <Compile Include="DependencyComparer.cs" />
     <Compile Include="Diffgram.cs" />
     <Compile Include="DocumentTypeConfigurator.cs" />
     <Compile Include="DocumentTypeDiffgram.cs" />

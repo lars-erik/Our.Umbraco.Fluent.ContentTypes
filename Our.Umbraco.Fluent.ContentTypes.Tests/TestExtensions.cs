@@ -12,20 +12,19 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Converters = new List<JsonConverter>
             {
                 new StringEnumConverter()
-            },
-            Formatting = Formatting.Indented
+            }
         };
 
         public static void Verify(this Diffgram value)
         {
-            Approvals.VerifyJson(JsonConvert.SerializeObject(value, Settings));
+            Approvals.VerifyJson(value.ToJson());
         }
         public static void Verify<TConfiguration, TEntity>(this EntityDiffgram<TConfiguration, TEntity> value)
         {
-            Approvals.VerifyJson(JsonConvert.SerializeObject(value, Settings));
+            Approvals.VerifyJson(value.ToJson());
         }
 
-        public static string ToJson(this object obj)
+        public static string ToJson(this object obj, Formatting formatting = Formatting.Indented)
         {
             return JsonConvert.SerializeObject(obj, Settings);
         }

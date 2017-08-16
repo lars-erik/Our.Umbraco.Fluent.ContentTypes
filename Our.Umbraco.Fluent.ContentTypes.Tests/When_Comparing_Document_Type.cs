@@ -33,7 +33,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             // TODO: .IsListView(false);
             // TODO: Default template
 
-            Config.Compare().DocumentTypes["contentType"].Verify();;
+            Config.Compare().DocumentTypes["contentType"].Verify();
         }
 
         [Test]
@@ -183,6 +183,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Assert.That(
                 diff, 
                 Has.Property("IsUnsafe").False &
+                Has.Property("IsModified").True &
                 Has.Property("Comparisons").With.Exactly(1).With.Property("Key").EqualTo("AllowedChildren").And.Property("Result").EqualTo(ComparisonResult.New));
         }
 

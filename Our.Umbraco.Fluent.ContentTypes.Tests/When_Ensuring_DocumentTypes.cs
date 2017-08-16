@@ -1,21 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using AutoMapper;
+using ClientDependency.Core.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Core.Models.Mapping;
+using Umbraco.Core.ObjectResolution;
+using Umbraco.Core.PropertyEditors;
+using Umbraco.Tests.BootManagers;
+using Umbraco.Tests.Models.Mapping;
+using Umbraco.Web.Models.ContentEditing;
 
 namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
     [TestFixture]
     [UseReporter(typeof(VisualStudioReporter))]
-    public class When_Ensuring_DocumentTypes : ComparisonTestBase
+    public partial class When_Ensuring_DocumentTypes : ComparisonTestBase
     {
+        [SetUp]
+        public void SetupMapping()
+        {
+            //create a fake property editor resolver to return fake property editors
+
+            Func<IEnumerable<Type>> typeListProducerList = Enumerable.Empty<Type>;
+
+            var _propertyEditorResolver = new Mock<PropertyEditorResolver>(
+
+                //ctor args
+
+                Mock.Of<IServiceProvider>(), Mock.Of<ILogger>(), typeListProducerList, CacheHelper.CreateDisabledCacheHelper().RuntimeCache);
+
+
+
+            var ctor = Type.GetType("Umbraco.Web.Models.Mapping.ContentTypeModelMapper, umbraco")
+                .GetConstructor(new[] { typeof(Lazy<PropertyEditorResolver>) });
+            Mapper.Initialize(configuration =>
+
+            {
+
+                //initialize our content type mapper
+                var mapper = (MapperConfiguration)ctor.Invoke(new[]{new Lazy<PropertyEditorResolver>(() => _propertyEditorResolver.Object) });
+
+                mapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
+
+                //var entityMapper = new EntityModelMapper();
+
+                //entityMapper.ConfigureMappings(configuration, appContext);
+
+            });
+        }
+
         [Test]
         public void Orders_Dependent_Types_Later_Than_Their_Dependencies()
         {
@@ -64,56 +107,30 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Config.DocumentType("d-1")
                 .Compositions("cmp-1");
             //.AllowedChildren("d-1-1"); // dammit! - what about circular references? (parent/allowedchildren) - rare UC?
+            // See prevents circular reference test.
 
             var diff = Config.Compare();
 
-            var orderedTypes = OrderByDependencies(diff, diff.DocumentTypes.Values);
+            var orderedTypes = DependencyComparer.OrderByDependencies(diff.DocumentTypes.Values);
+            var aliases = orderedTypes.Select(t => t.Key);
 
-            Console.WriteLine(orderedTypes.Select(t => t.Key).ToJson());
-            Assert.Inconclusive();
-
-            Approvals.VerifyJson(orderedTypes.Select(t => t.Key).ToJson());
+            Approvals.VerifyJson(aliases.ToJson(Formatting.None));
         }
 
-        private IEnumerable<DocumentTypeDiffgram> OrderByDependencies(Diffgram diffgram, IEnumerable<DocumentTypeDiffgram> documentTypesValues)
+        [Test]
+        public void Prevents_Circular_References()
         {
-            var comparer = new DependencyComparer();
-            return documentTypesValues.OrderBy(x => x, comparer);
-        }
+            Config.DocumentType("a")
+                .Parent("b");
 
-        public class DependencyComparer : IComparer<DocumentTypeDiffgram>
-        {
-            public DependencyComparer()
-            {
-            }
+            Config.DocumentType("b")
+                .AllowedChildren("a");
 
-            public int Compare(DocumentTypeDiffgram x, DocumentTypeDiffgram y)
-            {
-                if (x == null || y == null) throw new Exception("Can't sort null diffgrams");
-                var xDependsOnY = DependsOn(x, y);
-                var yDependsOnX = DependsOn(y, x);
-
-                if (xDependsOnY && yDependsOnX)
-                    throw new Exception("This looks like a circular reference. :(");
-
-                var retVal = 0;
-
-                if (xDependsOnY) retVal = 1;
-                if (yDependsOnX) retVal = -1;
-
-                Console.WriteLine($"{x.Key} depends on {y.Key}: {retVal}");
-
-                return retVal;
-            }
-
-            private bool DependsOn(DocumentTypeDiffgram x, DocumentTypeDiffgram y)
-            {
-                var dependencies = x.GetDependencies();
-                Console.WriteLine($"{x.Key}: {String.Join(", ", dependencies)}");
-                var dependsOn = dependencies.Contains(y.Key);
-
-                return dependsOn;
-            }
+            Assert.That(() =>
+                Config.Ensure(Config.Compare()),
+                Throws.Exception.InnerException.With
+                    .Message.EqualTo("Seems like we've hit a rift in time-space continuum. (Circular reference)")
+            );
         }
 
         [Test]
@@ -143,7 +160,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         private bool VerifyContentType(IContentType obj)
         {
-            Approvals.VerifyJson(obj.ToJson());
+            DocumentTypeDisplay jsonable = AutoMapper.Mapper.Map<DocumentTypeDisplay>(obj);
+            Approvals.VerifyJson(jsonable.ToJson());
             return true;
         }
     }

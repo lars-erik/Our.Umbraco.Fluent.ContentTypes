@@ -326,9 +326,12 @@
     <None Include="When_Comparing_DataTypes.For_New_Then_Is_Safe.approved.json" />
     <None Include="When_Comparing_Document_Type.With_New_Allowed_Templates_Of_Configured_Templates_Is_Safe.approved.json" />
     <None Include="When_Comparing_Document_Type.With_New_Allowed_Templates_Of_Existing_Templates_Is_Safe.approved.json" />
+    <None Include="When_Comparing_Document_Type.With_New_Property_Values_For_New_Type_Is_Safe.approved.json" />
     <None Include="When_Comparing_Templates.Then_Existing_Equal_Is_Safe.approved.json" />
     <None Include="When_Comparing_Templates.Then_Existing_Modified_Is_Unsafe.approved.json" />
     <None Include="When_Comparing_Templates.Then_New_Is_Safe.approved.json" />
+    <None Include="When_Ensuring_DataTypes.For_Existing_Creates_Missing_Prevalues.approved.json" />
+    <None Include="When_Ensuring_DocumentTypes.Orders_Dependent_Types_Later_Than_Their_Dependencies.approved.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Our.Umbraco.Fluent.ContentTypes\Our.Umbraco.Fluent.ContentTypes.csproj">

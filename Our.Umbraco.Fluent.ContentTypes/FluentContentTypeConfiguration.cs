@@ -54,6 +54,9 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
         public void Ensure(Diffgram diffgram)
         {
+            // Sort here to detect circular dependencies. Move to Safe check?
+            var orderedDocTypes = DependencyComparer.OrderByDependencies(diffgram.DocumentTypes.Values);
+
             foreach (var datatypeDiff in diffgram.DataTypes.Values)
             {
                 datatypeDiff.Ensure();
@@ -62,6 +65,11 @@ namespace Our.Umbraco.Fluent.ContentTypes
             foreach (var templateDiff in diffgram.Templates.Values)
             {
                 templateDiff.Ensure();
+            }
+
+            foreach (var doctypeDiff in orderedDocTypes)
+            {
+                doctypeDiff.Ensure();
             }
         }
     }

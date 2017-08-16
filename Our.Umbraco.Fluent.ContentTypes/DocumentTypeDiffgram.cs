@@ -173,5 +173,81 @@ namespace Our.Umbraco.Fluent.ContentTypes
         {
             return contentTypeService.GetContentType(Configuration.Alias);
         }
+
+        public bool DependsOn(DocumentTypeDiffgram y)
+        {
+            var dependencies = GetDependencies().ToArray();
+            var dependsOn = dependencies.Contains(y.Key);
+            return dependsOn;
+        }
+
+        public void Ensure()
+        {
+            var ensurer = new DocumentTypeEnsurer(this, ServiceContext);
+            ensurer.Ensure();
+        }
+    }
+
+    public class DocumentTypeEnsurer
+    {
+        private readonly DocumentTypeDiffgram diff;
+        private readonly ServiceContext serviceContext;
+
+        public DocumentTypeEnsurer(DocumentTypeDiffgram diff, ServiceContext serviceContext)
+        {
+            this.diff = diff;
+            this.serviceContext = serviceContext;
+        }
+
+        public void Ensure()
+        {
+            if (diff.IsUnsafe)
+                throw new Exception("Won't ensure unsafe diffgram");
+
+            var config = diff.Configuration;
+            var contentTypeService = serviceContext.ContentTypeService;
+
+            IContentType docType;
+            if (diff.IsNew)
+            {
+                var parent = config.Parent != null
+                    ? contentTypeService.GetContentType(config.Parent)
+                    : null;
+
+                // TODO: Automap?
+                docType = new ContentType(parent, config.Alias);
+                docType.Name = config.Name;
+                docType.Description = config.Description;
+                docType.Icon = config.Icon;
+
+            }
+            else
+            {
+                docType = contentTypeService.GetContentType(config.Alias);
+            }
+
+            if (diff.IsNew || diff.IsModified)
+            {
+                docType.AllowedTemplates = docType.AllowedTemplates.Union(
+                    config.AllowedTemplates
+                        .Except(docType.AllowedTemplates.Select(t => t.Alias))
+                        .Select(alias => serviceContext.FileService.GetTemplate(alias))
+                );
+
+                var compositions = config.Compositions
+                    .Except(docType.CompositionAliases())
+                    .Select(alias => contentTypeService.GetContentType(alias));
+
+                foreach (var composition in compositions)
+                    docType.AddContentType(composition);
+
+                foreach (var group in diff.Tabs.Values.Where(t => t.IsNew))
+                {
+                    
+                }
+            }
+
+            contentTypeService.Save(docType);
+        }
     }
 }

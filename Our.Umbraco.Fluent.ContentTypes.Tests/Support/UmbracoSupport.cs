@@ -118,6 +118,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests.Support
             try
             {
                 Initialize();
+                
             }
             catch (InvalidOperationException ex)
             {
