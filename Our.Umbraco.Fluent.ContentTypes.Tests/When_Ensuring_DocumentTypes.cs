@@ -43,19 +43,17 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
             var ctor = Type.GetType("Umbraco.Web.Models.Mapping.ContentTypeModelMapper, umbraco")
                 .GetConstructor(new[] { typeof(Lazy<PropertyEditorResolver>) });
+            var entityctor = Type.GetType("Umbraco.Web.Models.Mapping.EntityModelMapper, umbraco")
+                .GetConstructor(new Type[0]);
             Mapper.Initialize(configuration =>
 
             {
-
                 //initialize our content type mapper
                 var mapper = (MapperConfiguration)ctor.Invoke(new[]{new Lazy<PropertyEditorResolver>(() => _propertyEditorResolver.Object) });
-
                 mapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
 
-                //var entityMapper = new EntityModelMapper();
-
-                //entityMapper.ConfigureMappings(configuration, appContext);
-
+                var entityMapper = (MapperConfiguration)entityctor.Invoke(new object[0]);
+                entityMapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
             });
         }
 
@@ -160,7 +158,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
         private bool VerifyContentType(IContentType obj)
         {
-            DocumentTypeDisplay jsonable = AutoMapper.Mapper.Map<DocumentTypeDisplay>(obj);
+            var jsonable = Mapper.Map<DocumentTypeDisplay>(obj);
             Approvals.VerifyJson(jsonable.ToJson());
             return true;
         }
