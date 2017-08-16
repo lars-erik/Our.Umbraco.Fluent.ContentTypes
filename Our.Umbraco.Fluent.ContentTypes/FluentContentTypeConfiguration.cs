@@ -56,32 +56,37 @@ namespace Our.Umbraco.Fluent.ContentTypes
         {
             foreach (var datatypeDiff in diffgram.DataTypes.Values)
             {
-                IDataTypeDefinition datatype;
-                var datatypeConfig = datatypeDiff.Configuration;
+                Ensure(datatypeDiff);
+            }
+        }
 
-                var newPrevalueComparisons = datatypeDiff
-                    .Comparisons
-                    .Where(comparison => comparison.Key == "Prevalues" && comparison.Result == ComparisonResult.New)
-                    .Select(comparison => comparison.Discriminator);
-                var newPrevaluePairs = datatypeConfig.Prevalues.Where(kvp => newPrevalueComparisons.Contains(kvp.Key));
-                var newPrevalues = newPrevaluePairs.ToDictionary(kvp => kvp.Key, kvp => new PreValue(kvp.Value));
+        public void Ensure(DataTypeDiffgram datatypeDiff)
+        {
+            IDataTypeDefinition datatype;
+            var datatypeConfig = datatypeDiff.Configuration;
 
-                if (datatypeDiff.IsNew)
+            var newPrevalueComparisons = datatypeDiff
+                .Comparisons
+                .Where(comparison => comparison.Key == "Prevalues" && comparison.Result == ComparisonResult.New)
+                .Select(comparison => comparison.Discriminator);
+            var newPrevaluePairs = datatypeConfig.Prevalues.Where(kvp => newPrevalueComparisons.Contains(kvp.Key));
+            var newPrevalues = newPrevaluePairs.ToDictionary(kvp => kvp.Key, kvp => new PreValue(kvp.Value));
+
+            if (datatypeDiff.IsNew)
+            {
+                datatype = new DataTypeDefinition(datatypeConfig.PropertyEditorAlias)
                 {
-                    datatype = new DataTypeDefinition(datatypeConfig.PropertyEditorAlias)
-                    {
-                        Name = datatypeConfig.Name,
-                        DatabaseType = datatypeConfig.DatabaseType
-                    };
-                    serviceContext.DataTypeService.SaveDataTypeAndPreValues(datatype, newPrevalues);
-                }
-                else
-                {
-                    datatype = serviceContext.DataTypeService.GetDataTypeDefinitionByName(datatypeDiff.Key);
-                    var extPrevalues = serviceContext.DataTypeService.GetPreValuesCollectionByDataTypeId(datatype.Id);
-                    newPrevalues = extPrevalues.PreValuesAsDictionary.Union(newPrevalues).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-                    serviceContext.DataTypeService.SavePreValues(datatype, newPrevalues);
-                }
+                    Name = datatypeConfig.Name,
+                    DatabaseType = datatypeConfig.DatabaseType
+                };
+                serviceContext.DataTypeService.SaveDataTypeAndPreValues(datatype, newPrevalues);
+            }
+            else
+            {
+                datatype = serviceContext.DataTypeService.GetDataTypeDefinitionByName(datatypeDiff.Key);
+                var extPrevalues = serviceContext.DataTypeService.GetPreValuesCollectionByDataTypeId(datatype.Id);
+                newPrevalues = extPrevalues.PreValuesAsDictionary.Union(newPrevalues).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                serviceContext.DataTypeService.SavePreValues(datatype, newPrevalues);
             }
         }
     }
