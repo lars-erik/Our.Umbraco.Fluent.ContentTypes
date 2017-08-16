@@ -21,11 +21,11 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [SetUp]
         public void Setup()
         {
-            Config.Template("fancy")
+            var alias = "fancy";
+            Config.Template(alias)
                 .Name("Fancy template");
 
-            template = Mock.Of<ITemplate>();
-            Mock.Get(template).Setup(t => t.Alias).Returns("fancy");
+            template = StubTemplate(alias);
         }
 
         [Test]
@@ -49,14 +49,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void Then_New_Is_Safe()
         {
-            StubTemplate(null);
+            StubTemplate((ITemplate)null);
 
             Config.Compare().Verify();
-        }
-
-        private void StubTemplate(ITemplate value)
-        {
-            Mock.Get(Support.ServiceContext.FileService).Setup(s => s.GetTemplate("fancy")).Returns(value);
         }
     }
 }

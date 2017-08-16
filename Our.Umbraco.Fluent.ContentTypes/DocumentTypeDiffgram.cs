@@ -23,6 +23,19 @@ namespace Our.Umbraco.Fluent.ContentTypes
             Tabs = new Dictionary<string, TabDiffgram>();
         }
 
+        public IEnumerable<string> GetDependencies(int currentLevel = 0)
+        {
+            if (currentLevel > 50)
+                throw new Exception("Seems like we've hit a rift in time-space continuum. (Circular reference)");
+
+            var theseDependencies = Configuration.AllowedChildren.Union(Configuration.Compositions);
+            if (Configuration.Parent != null)
+                theseDependencies = theseDependencies.Union(new[] {Configuration.Parent});
+            var nextLevel = diffgram.DocumentTypes.Where(kvp => theseDependencies.Contains(kvp.Key)).SelectMany(kvp => kvp.Value.GetDependencies(currentLevel + 1));
+            var all = theseDependencies.Union(nextLevel).Distinct();
+            return all;
+        }
+
         protected override bool ValidateConfiguration()
         {
             return true;

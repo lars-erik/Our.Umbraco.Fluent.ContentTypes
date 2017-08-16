@@ -17,7 +17,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(1, "contentType", contentType);
             contentType.PropertyGroups = new PropertyGroupCollection(new List<PropertyGroup>());
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Tab("tab");
         }
 

@@ -55,5 +55,18 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Mock.Get(Support.ServiceContext.DataTypeService).Setup(s => s.GetDataTypeDefinitionByName(dataTypeName)).Returns(definition);
             return definition;
         }
+
+        protected ITemplate StubTemplate(string alias)
+        {
+            var newTemplate = Mock.Of<ITemplate>();
+            Mock.Get(newTemplate).Setup(t => t.Alias).Returns(alias);
+            StubTemplate(newTemplate);
+            return newTemplate;
+        }
+
+        protected void StubTemplate(ITemplate value)
+        {
+            Mock.Get(Support.ServiceContext.FileService).Setup(s => s.GetTemplate("fancy")).Returns(value);
+        }
     }
 }

@@ -269,6 +269,7 @@
     <Compile Include="DataTypeConfiguration.cs" />
     <Compile Include="DataTypeConfigurator.cs" />
     <Compile Include="DataTypeDiffgram.cs" />
+    <Compile Include="DataTypeEnsurer.cs" />
     <Compile Include="Diffgram.cs" />
     <Compile Include="DocumentTypeConfigurator.cs" />
     <Compile Include="DocumentTypeDiffgram.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="TabDiffgram.cs" />
     <Compile Include="TemplateConfigurator.cs" />
     <Compile Include="TemplateDiffgram.cs" />
+    <Compile Include="TemplateEnsurer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

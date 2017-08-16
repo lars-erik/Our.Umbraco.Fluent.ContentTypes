@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -154,6 +155,12 @@ namespace Our.Umbraco.Fluent.ContentTypes
 
             return type.GetProperties(BindingFlags.FlattenHierarchy
                 | BindingFlags.Public | BindingFlags.Instance);
+        }
+
+        public void AssertSafe()
+        {
+            if (this.IsUnsafe)
+                throw new Exception("Diffgram is unsafe");
         }
     }
 }

@@ -37,9 +37,9 @@ namespace Our.Umbraco.Fluent.ContentTypes
             return this;
         }
 
-        public DocumentTypeConfigurator ContentType(string alias)
+        public DocumentTypeConfigurator DocumentType(string alias)
         {
-            return parent.ContentType(alias);
+            return parent.DocumentType(alias);
         }
 
         public DocumentTypeConfigurator AllowedChildren(params string[] children)
@@ -78,11 +78,11 @@ namespace Our.Umbraco.Fluent.ContentTypes
             return this;
         }
 
-        public DocumentTypeConfigurator IsListView(bool isListView)
-        {
-            Configuration.IsListView = isListView;
-            return this;
-        }
+        //public DocumentTypeConfigurator IsListView(bool isListView)
+        //{
+        //    Configuration.IsListView = isListView;
+        //    return this;
+        //}
     }
 
     public class DocumentTypeConfiguration
@@ -97,7 +97,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
         public string Icon { get; set; }
         public string Description { get; set; }
         public bool AllowedAsRoot { get; set; }
-        public bool IsListView { get; set; }
+        //public bool IsListView { get; set; }
 
         public DocumentTypeConfiguration(string alias)
         {

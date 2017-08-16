@@ -27,7 +27,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             AddRichTextProperty();
 
             richTextConfig = Config
-                .ContentType("contentType")
+                .DocumentType("contentType")
                     .Tab("tab")
                         .Property("richtext")
                             .DisplayName("Rich text")

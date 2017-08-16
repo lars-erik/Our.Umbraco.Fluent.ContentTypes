@@ -12,11 +12,13 @@ namespace Our.Umbraco.Fluent.ContentTypes
     {
         private readonly Diffgram diffgram;
         private readonly IDataTypeService dataTypeService;
+        private readonly DataTypeEnsurer dataTypeEnsurer;
 
         public DataTypeDiffgram(Diffgram diffgram, DataTypeConfiguration configuration, ServiceContext serviceContext) : base(configuration, serviceContext)
         {
             this.diffgram = diffgram;
             dataTypeService = serviceContext.DataTypeService;
+            dataTypeEnsurer = new DataTypeEnsurer(this, serviceContext);
         }
 
         public override string Key => Configuration.Name;
@@ -60,6 +62,11 @@ namespace Our.Umbraco.Fluent.ContentTypes
                 return new Comparison("Prevalues", kvp.Key, ComparisonResult.Modified);
 
             return new Comparison("Prevalues", kvp.Key, ComparisonResult.Unchanged);
+        }
+
+        public void Ensure()
+        {
+            dataTypeEnsurer.Ensure();
         }
     }
 }

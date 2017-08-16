@@ -290,7 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComparisonTestBase.cs" />
-    <Compile Include="DiffgramTestExtensions.cs" />
+    <Compile Include="TestExtensions.cs" />
     <Compile Include="Support\UmbracoSupport.cs" />
     <Compile Include="When_Comparing_DataTypes.cs" />
     <Compile Include="When_Comparing_Document_Type.cs" />
@@ -299,6 +299,7 @@
     <Compile Include="When_Comparing_Tab.cs" />
     <Compile Include="When_Comparing_Templates.cs" />
     <Compile Include="When_Ensuring_DataTypes.cs" />
+    <Compile Include="When_Ensuring_DocumentTypes.cs" />
     <Compile Include="When_Ensuring_Templates.cs" />
   </ItemGroup>
   <ItemGroup>

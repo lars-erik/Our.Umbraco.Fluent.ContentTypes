@@ -25,7 +25,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void With_New_Property_Values_For_New_Type_Is_Safe()
         {
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Name("Content type")
                 .Icon("icon-shopping-basket")
                 .Description("A nice description")
@@ -43,7 +43,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(2, "compositeA");
             StubContentType(3, "compositeB");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Compositions("compositeA", "compositeB");
 
             var diff = Config.Compare();
@@ -56,7 +56,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             StubContentType(1, "contentType", Mock.Of<IContentType>());
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Compositions("compositeA", "compositeB");
 
             var fullDiff = Config.Compare();
@@ -77,9 +77,9 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             StubContentType(1, "contentType", Mock.Of<IContentType>());
 
-            Config.ContentType("compositeA");
+            Config.DocumentType("compositeA");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Compositions("compositeA", "compositeB");
 
             var diff = ContentTypeDiff();
@@ -99,7 +99,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             StubContentType(2, "parent");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Parent("parent");
 
             var diff = ContentTypeDiff();
@@ -111,8 +111,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         public void For_New_Then_Configured_Parent_Is_Safe()
         {
             Config
-                .ContentType("parent")
-                .ContentType("contentType")
+                .DocumentType("parent")
+                .DocumentType("contentType")
                     .Parent("parent");
 
             var diff = ContentTypeDiff();
@@ -129,7 +129,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
             type.ParentId = 2;
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Parent("otherParent");
 
             var diff = ContentTypeDiff();
@@ -144,7 +144,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(2, "parent");
             type.ParentId = 2;
 
-            Config.ContentType("contentType");
+            Config.DocumentType("contentType");
 
             var diff = ContentTypeDiff();
 
@@ -157,7 +157,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(1, "contentType");
             StubContentType(2, "parent");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .Parent("parent");
 
             var diff = ContentTypeDiff();
@@ -175,7 +175,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(1, "contentType");
             StubContentType(2, "child");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .AllowedChildren("child");
 
             var diff = ContentTypeDiff();
@@ -191,7 +191,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             StubContentType(1, "contentType");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .AllowedChildren("child");
 
             var diff = ContentTypeDiff();
@@ -208,7 +208,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubContentType(1, "contentType");
             StubTemplate("template");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .AllowedTemplates("template");
 
             Config.Compare().DocumentTypes["contentType"].Verify();
@@ -221,7 +221,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
             Config.Template("template");
 
-            Config.ContentType("contentType")
+            Config.DocumentType("contentType")
                 .AllowedTemplates("template");
 
             Config.Compare().DocumentTypes["contentType"].Verify();
@@ -238,7 +238,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             var alias = "contentType";
             StubContentType(1, alias, contentType);
-            Config.ContentType(alias);
+            Config.DocumentType(alias);
             var diffgram = Config.Compare();
             Assert.That(diffgram.DocumentTypes[alias], constraint);
         }
@@ -259,7 +259,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 .PropertyEditor("Umbraco.TinyMCEv3")
                 .DataType(DataTypeDatabaseType.Ntext);
 
-            config.ContentType("contentType")
+            config.DocumentType("contentType")
                 .Tab("Content")
                     .Property("text")
                         .DisplayName("The text")
