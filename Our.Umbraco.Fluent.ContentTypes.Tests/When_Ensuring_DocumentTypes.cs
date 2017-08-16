@@ -51,11 +51,6 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubDataType(50, "RTE");
             StubDataType(51, "Checkbox");
 
-            Mock.Get(editorResolver).Setup(r => r.GetByAlias(It.IsAny<string>())).Returns(new TestablePropertyEditor());
-            Mock.Get(Support.ServiceContext.DataTypeService)
-                .Setup(s => s.GetPreValuesCollectionByDataTypeId(It.IsAny<int>()))
-                .Returns(new PreValueCollection(new Dictionary<string, PreValue>()));
-
             StubTemplate("template", new Guid("73B57DF0-F0F4-4F9A-992E-C2A4F8AB8346"));
 
             StubContentType(1, "parent");
@@ -174,6 +169,11 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 var entityMapper = (MapperConfiguration)entityctor.Invoke(new object[0]);
                 entityMapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
             });
+
+            Mock.Get(editorResolver).Setup(r => r.GetByAlias(It.IsAny<string>())).Returns(new TestablePropertyEditor());
+            Mock.Get(Support.ServiceContext.DataTypeService)
+                .Setup(s => s.GetPreValuesCollectionByDataTypeId(It.IsAny<int>()))
+                .Returns(new PreValueCollection(new Dictionary<string, PreValue>()));
         }
 
         private bool VerifyContentType(IContentType obj)
