@@ -9,8 +9,7 @@
         "Name": "Content type",
         "Icon": "icon-shopping-basket",
         "Description": "A nice description",
-        "AllowedAsRoot": false,
-        "IsListView": false
+        "AllowedAsRoot": false
     },
     "Key": "contentType",
     "Tabs": {},

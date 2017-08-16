@@ -16,16 +16,16 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
     [UseReporter(typeof(VisualStudioReporter))]
     public class When_Comparing_Templates : ComparisonTestBase
     {
+        private const string ExpectedAlias = "fancy";
         private ITemplate template;
 
         [SetUp]
         public void Setup()
         {
-            var alias = "fancy";
-            Config.Template(alias)
+            Config.Template(ExpectedAlias)
                 .Name("Fancy template");
 
-            template = StubTemplate(alias);
+            template = StubTemplate(ExpectedAlias, new Guid("3F459DA6-CE3C-458C-AF0E-66104800F6EA"));
         }
 
         [Test]
@@ -49,7 +49,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void Then_New_Is_Safe()
         {
-            StubTemplate((ITemplate)null);
+            Mock.Get(Support.ServiceContext.FileService).Reset();
+            Mock.Get(Support.ServiceContext.FileService).Setup(s => s.GetTemplate(ExpectedAlias)).Returns<ITemplate>(null);
 
             Config.Compare().Verify();
         }

@@ -205,7 +205,9 @@ namespace Our.Umbraco.Fluent.ContentTypes
                 throw new Exception("Won't ensure unsafe diffgram");
 
             var config = diff.Configuration;
+
             var contentTypeService = serviceContext.ContentTypeService;
+            var dataTypeService = serviceContext.DataTypeService;
 
             IContentType docType;
             if (diff.IsNew)
@@ -219,7 +221,7 @@ namespace Our.Umbraco.Fluent.ContentTypes
                 docType.Name = config.Name;
                 docType.Description = config.Description;
                 docType.Icon = config.Icon;
-
+                docType.AllowedAsRoot = config.AllowedAsRoot;
             }
             else
             {
@@ -241,9 +243,30 @@ namespace Our.Umbraco.Fluent.ContentTypes
                 foreach (var composition in compositions)
                     docType.AddContentType(composition);
 
-                foreach (var group in diff.Tabs.Values.Where(t => t.IsNew))
+                foreach (var groupDiff in diff.Tabs.Values)
                 {
-                    
+                    if (groupDiff.IsNew)
+                    {
+                        docType.AddPropertyGroup(groupDiff.Key);
+                    }
+
+                    var group = docType.PropertyGroups[groupDiff.Key];
+
+                    foreach (var propDiff in groupDiff.Properties.Values)
+                    {
+                        var propConfig = propDiff.Configuration;
+                        if (propDiff.IsNew)
+                        {
+                            var dataType = dataTypeService.GetDataTypeDefinitionByName(propConfig.DataType);
+                            var propertyType = new PropertyType(dataType, propConfig.Alias)
+                            {
+                                Name = propConfig.Name,
+                                Description = propConfig.Description,
+                                DataTypeDefinitionId = dataType.Id
+                            };
+                            group.PropertyTypes.Add(propertyType);
+                        }
+                    }
                 }
             }
 

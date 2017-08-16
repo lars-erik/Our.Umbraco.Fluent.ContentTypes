@@ -1,1 +1,212 @@
-﻿ 
+﻿{
+    "allowedTemplates": [
+        {
+            "name": null,
+            "id": 0,
+            "udi": "umb://template/73b57df0f0f44f9a992ec2a4f8ab8346",
+            "icon": "icon-layout",
+            "trashed": false,
+            "key": "73b57df0-f0f4-4f9a-992e-c2a4f8ab8346",
+            "parentId": -1,
+            "alias": "template",
+            "path": null,
+            "metaData": {}
+        }
+    ],
+    "defaultTemplate": {
+        "name": null,
+        "id": 0,
+        "udi": "umb://template/73b57df0f0f44f9a992ec2a4f8ab8346",
+        "icon": "icon-layout",
+        "trashed": false,
+        "key": "73b57df0-f0f4-4f9a-992e-c2a4f8ab8346",
+        "parentId": -1,
+        "alias": "template",
+        "path": null,
+        "metaData": {}
+    },
+    "groups": [
+        {
+            "contentTypeId": 0,
+            "parentTabContentTypes": [],
+            "parentTabContentTypeNames": [],
+            "properties": [
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "richText",
+                    "description": "Go wild here",
+                    "validation": {
+                        "mandatory": false,
+                        "pattern": null
+                    },
+                    "label": "Killer article",
+                    "sortOrder": 0,
+                    "dataTypeId": 50,
+                    "groupId": 0
+                },
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "blockRobots",
+                    "description": "Chicken out",
+                    "validation": {
+                        "mandatory": false,
+                        "pattern": null
+                    },
+                    "label": "Block robots",
+                    "sortOrder": 0,
+                    "dataTypeId": 51,
+                    "groupId": 0
+                }
+            ],
+            "inherited": false,
+            "id": 0,
+            "sortOrder": 0,
+            "name": "A tab"
+        },
+        {
+            "contentTypeId": 0,
+            "parentTabContentTypes": [],
+            "parentTabContentTypeNames": [],
+            "properties": [
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "makeMoney",
+                    "description": "Tick here to make immense amounts of money",
+                    "validation": {
+                        "mandatory": false,
+                        "pattern": null
+                    },
+                    "label": "Make money from this",
+                    "sortOrder": 0,
+                    "dataTypeId": 51,
+                    "groupId": 0
+                }
+            ],
+            "inherited": false,
+            "id": 0,
+            "sortOrder": 1,
+            "name": "Secret tab"
+        },
+        {
+            "contentTypeId": 0,
+            "parentTabContentTypes": [],
+            "parentTabContentTypeNames": [],
+            "properties": [
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "richText",
+                    "description": "Go wild here",
+                    "validation": {
+                        "mandatory": false,
+                        "pattern": null
+                    },
+                    "label": "Killer article",
+                    "sortOrder": 0,
+                    "dataTypeId": 50,
+                    "groupId": -666
+                },
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "blockRobots",
+                    "description": "Chicken out",
+                    "validation": {
+                        "mandatory": false,
+                        "pattern": null
+                    },
+                    "label": "Block robots",
+                    "sortOrder": 0,
+                    "dataTypeId": 51,
+                    "groupId": -666
+                },
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "makeMoney",
+                    "description": "Tick here to make immense amounts of money",
+                    "validation": {
+                        "mandatory": false,
+                        "pattern": null
+                    },
+                    "label": "Make money from this",
+                    "sortOrder": 0,
+                    "dataTypeId": 51,
+                    "groupId": -666
+                }
+            ],
+            "inherited": false,
+            "id": -666,
+            "sortOrder": 999,
+            "name": "Generic properties"
+        }
+    ],
+    "isContainer": false,
+    "listViewEditorName": "List View - Content",
+    "allowedContentTypes": [],
+    "compositeContentTypes": [
+        "parent",
+        "mixin"
+    ],
+    "lockedCompositeContentTypes": [],
+    "allowAsRoot": true,
+    "notifications": [],
+    "ModelState": null,
+    "alias": "docType",
+    "updateDate": "0001-01-01T00:00:00",
+    "createDate": "0001-01-01T00:00:00",
+    "description": "A fine description",
+    "thumbnail": "folder.png",
+    "iconIsClass": true,
+    "iconFilePath": "",
+    "thumbnailIsClass": false,
+    "thumbnailFilePath": "/umbraco/images/thumbnails/folder.png",
+    "name": "A nice doctype",
+    "id": 0,
+    "udi": "umb://document-type/4b47cf700ba94f56a2999171ad89a26b",
+    "icon": "icon-folder",
+    "trashed": false,
+    "key": "4b47cf70-0ba9-4f56-a299-9171ad89a26b",
+    "parentId": 1,
+    "path": null,
+    "metaData": {}
+}

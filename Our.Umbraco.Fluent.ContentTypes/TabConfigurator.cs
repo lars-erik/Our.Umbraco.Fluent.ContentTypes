@@ -22,6 +22,11 @@ namespace Our.Umbraco.Fluent.ContentTypes
         {
             return new PropertyConfigurator(this, alias);
         }
+
+        public TabConfigurator Tab(string name)
+        {
+            return parent.Tab(name);
+        }
     }
 
     public class TabConfiguration

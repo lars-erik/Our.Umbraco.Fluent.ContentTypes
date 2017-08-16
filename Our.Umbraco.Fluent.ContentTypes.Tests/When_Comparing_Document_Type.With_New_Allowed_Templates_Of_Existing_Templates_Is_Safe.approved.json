@@ -11,8 +11,7 @@
         "Name": null,
         "Icon": null,
         "Description": null,
-        "AllowedAsRoot": false,
-        "IsListView": false
+        "AllowedAsRoot": false
     },
     "Key": "contentType",
     "Tabs": {},

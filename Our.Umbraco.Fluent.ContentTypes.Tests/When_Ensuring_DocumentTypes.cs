@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using AutoMapper;
-using ClientDependency.Core.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.Mapping;
 using Umbraco.Core.ObjectResolution;
@@ -24,37 +25,71 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 {
     [TestFixture]
     [UseReporter(typeof(VisualStudioReporter))]
-    public partial class When_Ensuring_DocumentTypes : ComparisonTestBase
+    public class When_Ensuring_DocumentTypes : ComparisonTestBase
     {
-        [SetUp]
-        public void SetupMapping()
+        private PropertyEditorResolver editorResolver;
+
+        [Test]
+        public void Prevents_Circular_References()
         {
-            //create a fake property editor resolver to return fake property editors
+            Config.DocumentType("a")
+                .Parent("b");
 
-            Func<IEnumerable<Type>> typeListProducerList = Enumerable.Empty<Type>;
+            Config.DocumentType("b")
+                .AllowedChildren("a");
 
-            var _propertyEditorResolver = new Mock<PropertyEditorResolver>(
+            Assert.That(() =>
+                Config.Ensure(Config.Compare()),
+                Throws.Exception.InnerException.With
+                    .Message.EqualTo("Seems like we've hit a rift in time-space continuum. (Circular reference)")
+            );
+        }
 
-                //ctor args
+        [Test]
+        public void Creates_New()
+        {
+            StubDataType(50, "RTE");
+            StubDataType(51, "Checkbox");
 
-                Mock.Of<IServiceProvider>(), Mock.Of<ILogger>(), typeListProducerList, CacheHelper.CreateDisabledCacheHelper().RuntimeCache);
+            Mock.Get(editorResolver).Setup(r => r.GetByAlias(It.IsAny<string>())).Returns(new TestablePropertyEditor());
+            Mock.Get(Support.ServiceContext.DataTypeService)
+                .Setup(s => s.GetPreValuesCollectionByDataTypeId(It.IsAny<int>()))
+                .Returns(new PreValueCollection(new Dictionary<string, PreValue>()));
 
+            StubTemplate("template", new Guid("73B57DF0-F0F4-4F9A-992E-C2A4F8AB8346"));
 
+            StubContentType(1, "parent");
+            StubContentType(2, "child");
+            StubContentType(3, "mixin");
 
-            var ctor = Type.GetType("Umbraco.Web.Models.Mapping.ContentTypeModelMapper, umbraco")
-                .GetConstructor(new[] { typeof(Lazy<PropertyEditorResolver>) });
-            var entityctor = Type.GetType("Umbraco.Web.Models.Mapping.EntityModelMapper, umbraco")
-                .GetConstructor(new Type[0]);
-            Mapper.Initialize(configuration =>
+            Config.DocumentType("docType")
+                .Name("A nice doctype")
+                .Description("A fine description")
+                .Icon("icon-folder")
+                .AllowedAsRoot(true)
+                .Parent("parent")
+                .AllowedTemplates("template")
+                .AllowedChildren("child")
+                .Compositions("mixin")
+                .Tab("A tab")
+                    .Property("richText")
+                        .DisplayName("Killer article")
+                        .Description("Go wild here")
+                        .DataType("RTE")
+                    .Property("blockRobots")
+                        .DisplayName("Block robots")
+                        .Description("Chicken out")
+                        .DataType("Checkbox")
+                .Tab("Secret tab")
+                    .Property("makeMoney")
+                        .DisplayName("Make money from this")
+                        .Description("Tick here to make immense amounts of money")
+                        .DataType("Checkbox");
 
-            {
-                //initialize our content type mapper
-                var mapper = (MapperConfiguration)ctor.Invoke(new[]{new Lazy<PropertyEditorResolver>(() => _propertyEditorResolver.Object) });
-                mapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
+            Config.Ensure(Config.Compare());
 
-                var entityMapper = (MapperConfiguration)entityctor.Invoke(new object[0]);
-                entityMapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
-            });
+            Mock.Get(Support.ServiceContext.ContentTypeService)
+                .Verify(s => s.Save(Match.Create<IContentType>(VerifyContentType), 0));
         }
 
         [Test]
@@ -115,45 +150,30 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             Approvals.VerifyJson(aliases.ToJson(Formatting.None));
         }
 
-        [Test]
-        public void Prevents_Circular_References()
+        [SetUp]
+        public void SetupMapping()
         {
-            Config.DocumentType("a")
-                .Parent("b");
-
-            Config.DocumentType("b")
-                .AllowedChildren("a");
-
-            Assert.That(() =>
-                Config.Ensure(Config.Compare()),
-                Throws.Exception.InnerException.With
-                    .Message.EqualTo("Seems like we've hit a rift in time-space continuum. (Circular reference)")
+            Func<IEnumerable<Type>> typeProducer = Enumerable.Empty<Type>;
+            var _propertyEditorResolver = new Mock<PropertyEditorResolver>(
+                Mock.Of<IServiceProvider>(), 
+                Mock.Of<ILogger>(), 
+                typeProducer, 
+                (IRuntimeCacheProvider)CacheHelper.CreateDisabledCacheHelper().RuntimeCache
             );
-        }
+            editorResolver = _propertyEditorResolver.Object;
 
-        [Test]
-        public void Creates_New()
-        {
-            StubTemplate("template");
+            var ctor = Type.GetType("Umbraco.Web.Models.Mapping.ContentTypeModelMapper, umbraco")
+                .GetConstructor(new[] { typeof(Lazy<PropertyEditorResolver>) });
+            var entityctor = Type.GetType("Umbraco.Web.Models.Mapping.EntityModelMapper, umbraco")
+                .GetConstructor(new Type[0]);
+            Mapper.Initialize(configuration =>
+            {
+                var mapper = (MapperConfiguration)ctor.Invoke(new[] { new Lazy<PropertyEditorResolver>(() => editorResolver) });
+                mapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
 
-            StubContentType(1, "parent");
-            StubContentType(2, "child");
-            StubContentType(3, "mixin");
-
-            Config.DocumentType("docType")
-                .Name("A nice doctype")
-                .Description("A fine description")
-                .Icon("icon-folder")
-                .AllowedAsRoot(true)
-                .Parent("parent")
-                .AllowedTemplates("template")
-                .AllowedChildren("child")
-                .Compositions("mixin");
-
-            Config.Ensure(Config.Compare());
-
-            Mock.Get(Support.ServiceContext.ContentTypeService)
-                .Verify(s => s.Save(Match.Create<IContentType>(VerifyContentType), 0));
+                var entityMapper = (MapperConfiguration)entityctor.Invoke(new object[0]);
+                entityMapper.ConfigureMappings(configuration, Support.UmbracoContext.Application);
+            });
         }
 
         private bool VerifyContentType(IContentType obj)
@@ -161,6 +181,11 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             var jsonable = Mapper.Map<DocumentTypeDisplay>(obj);
             Approvals.VerifyJson(jsonable.ToJson());
             return true;
+        }
+
+        [PropertyEditor("dummy", "Dummy", "is-nice.html")]
+        public class TestablePropertyEditor : PropertyEditor
+        {
         }
     }
 }

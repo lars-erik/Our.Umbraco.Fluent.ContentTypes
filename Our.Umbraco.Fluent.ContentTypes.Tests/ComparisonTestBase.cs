@@ -1,3 +1,4 @@
+using System;
 using Moq;
 using NUnit.Framework;
 using Our.Umbraco.Fluent.ContentTypes.Tests.Support;
@@ -41,6 +42,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             {
                 contentType.Id = id;
                 contentType.Alias = contentTypeAlias;
+                contentType.Path = "-1," + id;
             }
             ContentTypeServiceMock.Setup(t => t.GetContentType(id)).Returns(contentType);
             ContentTypeServiceMock.Setup(t => t.GetContentType(contentTypeAlias)).Returns(contentType);
@@ -56,17 +58,22 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             return definition;
         }
 
-        protected ITemplate StubTemplate(string alias)
+        protected ITemplate StubTemplate(string alias, Guid? guid = null)
         {
+            guid = guid ?? Guid.NewGuid();
             var newTemplate = Mock.Of<ITemplate>();
             Mock.Get(newTemplate).Setup(t => t.Alias).Returns(alias);
+            Mock.Get(newTemplate).Setup(t => t.Key).Returns(guid.Value);
             StubTemplate(newTemplate);
             return newTemplate;
         }
 
         protected void StubTemplate(ITemplate value)
         {
-            Mock.Get(Support.ServiceContext.FileService).Setup(s => s.GetTemplate("fancy")).Returns(value);
+            if (value != null)
+            { 
+                Mock.Get(Support.ServiceContext.FileService).Setup(s => s.GetTemplate(value.Alias)).Returns(value);
+            }
         }
     }
 }
