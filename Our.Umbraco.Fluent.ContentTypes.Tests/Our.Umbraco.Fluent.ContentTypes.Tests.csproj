@@ -342,6 +342,7 @@
     <None Include="When_Comparing_Templates.Then_Existing_Modified_Is_Unsafe.approved.json" />
     <None Include="When_Comparing_Templates.Then_New_Is_Safe.approved.json" />
     <None Include="When_Ensuring_DataTypes.For_Existing_Creates_Missing_Prevalues.approved.json" />
+    <None Include="When_Ensuring_DocumentTypes.Creates_New.approved.json" />
     <None Include="When_Ensuring_DocumentTypes.Orders_Dependent_Types_Later_Than_Their_Dependencies.approved.json" />
   </ItemGroup>
   <ItemGroup>

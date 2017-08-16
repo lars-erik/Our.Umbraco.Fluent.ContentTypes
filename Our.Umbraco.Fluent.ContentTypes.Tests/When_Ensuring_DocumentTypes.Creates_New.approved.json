@@ -202,10 +202,10 @@
     "thumbnailFilePath": "/umbraco/images/thumbnails/folder.png",
     "name": "A nice doctype",
     "id": 0,
-    "udi": "umb://document-type/4b47cf700ba94f56a2999171ad89a26b",
+    "udi": "umb://document-type/2bfec211884b4e70a8bd6992c0dc687c",
     "icon": "icon-folder",
     "trashed": false,
-    "key": "4b47cf70-0ba9-4f56-a299-9171ad89a26b",
+    "key": "2bfec211-884b-4e70-a8bd-6992c0dc687c",
     "parentId": 1,
     "path": null,
     "metaData": {}

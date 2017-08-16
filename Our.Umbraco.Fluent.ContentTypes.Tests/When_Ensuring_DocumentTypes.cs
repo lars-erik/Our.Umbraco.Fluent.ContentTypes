@@ -179,6 +179,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         private bool VerifyContentType(IContentType obj)
         {
             var jsonable = Mapper.Map<DocumentTypeDisplay>(obj);
+            jsonable.Key = new Guid("2BFEC211-884B-4E70-A8BD-6992C0DC687C");
+            jsonable.Udi = new GuidUdi("document-type", jsonable.Key);
             Approvals.VerifyJson(jsonable.ToJson());
             return true;
         }
