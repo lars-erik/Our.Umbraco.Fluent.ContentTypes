@@ -242,6 +242,14 @@ namespace Our.Umbraco.Fluent.ContentTypes
                         .Select(alias => serviceContext.FileService.GetTemplate(alias))
                 );
 
+                var extAllowedChildren = docType.AllowedContentTypes.Select(t => t.Alias);
+                var newAllowedChildren = config.AllowedChildren.Except(extAllowedChildren)
+                    .Select(a => contentTypeService.GetContentType(a))
+                    .Select(t => new ContentTypeSort(new Lazy<int>(() => t.Id), 0, t.Name));
+                docType.AllowedContentTypes = docType
+                    .AllowedContentTypes
+                    .Union(newAllowedChildren);
+
                 var compositions = config.Compositions
                     .Except(docType.CompositionAliases())
                     .Select(alias => contentTypeService.GetContentType(alias));

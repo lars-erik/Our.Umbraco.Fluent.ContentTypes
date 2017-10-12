@@ -182,7 +182,9 @@
     ],
     "isContainer": false,
     "listViewEditorName": "List View - Content",
-    "allowedContentTypes": [],
+    "allowedContentTypes": [
+        2    
+    ],
     "compositeContentTypes": [
         "parent",
         "mixin"
