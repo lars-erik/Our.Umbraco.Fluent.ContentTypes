@@ -1,5 +1,8 @@
-﻿namespace Our.Umbraco.Fluent.ContentTypes
+﻿using System.Diagnostics;
+
+namespace Our.Umbraco.Fluent.ContentTypes
 {
+    [DebuggerDisplay("Comparison of {Key}: {Result}")]
     public class Comparison
     {
         public string Key { get; }

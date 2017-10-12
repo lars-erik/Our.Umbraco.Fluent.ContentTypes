@@ -83,8 +83,17 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
 
             Config.Ensure(Config.Compare());
 
-            Mock.Get(Support.ServiceContext.ContentTypeService)
-                .Verify(s => s.Save(Match.Create<IContentType>(VerifyContentType), 0));
+            VerifySavedDocumentType();
+        }
+
+        [Test]
+        public void Creates_New_Without_Parent()
+        {
+            Config.DocumentType("xyz");
+
+            Config.Ensure(Config.Compare());
+
+            VerifySavedDocumentType();
         }
 
         [Test]
@@ -143,6 +152,12 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             var aliases = orderedTypes.Select(t => t.Key);
 
             Approvals.VerifyJson(aliases.ToJson(Formatting.None));
+        }
+
+        private void VerifySavedDocumentType()
+        {
+            Mock.Get(Support.ServiceContext.ContentTypeService)
+                .Verify(s => s.Save(Match.Create<IContentType>(VerifyContentType), 0));
         }
 
         [SetUp]

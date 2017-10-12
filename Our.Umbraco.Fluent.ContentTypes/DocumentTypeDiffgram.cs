@@ -217,7 +217,13 @@ namespace Our.Umbraco.Fluent.ContentTypes
                     : null;
 
                 // TODO: Automap?
-                docType = new ContentType(parent, config.Alias);
+                if (parent != null)
+                    docType = new ContentType(parent, config.Alias);
+                else
+                    docType = new ContentType(-1)
+                    {
+                        Alias = config.Alias
+                    };
                 docType.Name = config.Name;
                 docType.Description = config.Description;
                 docType.Icon = config.Icon;

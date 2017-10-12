@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Fluent.ContentTypes
 {
+    [DebuggerDisplay("Diff of {Key}: IsNew:{IsNew}, IsModified:{IsModified}, IsUnsafe:{IsUnsafe}")]
     public abstract class EntityDiffgram<TConfiguration, TEntity>
     {
         protected readonly ServiceContext ServiceContext;
@@ -84,7 +86,21 @@ namespace Our.Umbraco.Fluent.ContentTypes
                     var sourceValue = property.GetValue(Configuration);
                     var targetValue = targetProp?.GetValue(Existing);
 
-                    if ((sourceValue != null && sourceValue.Equals(targetValue)) || (sourceValue == null && targetValue == null))
+                    var untouched = false;
+                    if (sourceValue is string)
+                    {
+                        untouched = (String.IsNullOrWhiteSpace(sourceValue as string)
+                                    && String.IsNullOrWhiteSpace(targetValue as string))
+                                    || (sourceValue != null
+                                    &&  sourceValue.Equals(targetValue));
+                    }
+                    else
+                    {
+                        untouched = ((sourceValue != null && sourceValue.Equals(targetValue))
+                                     || (sourceValue == null && targetValue == null));
+                    }
+
+                    if (untouched)
                     {
                         thisModified = false;
                         break;
