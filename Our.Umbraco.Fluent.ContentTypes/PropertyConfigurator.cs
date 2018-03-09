@@ -43,6 +43,18 @@ namespace Our.Umbraco.Fluent.ContentTypes
         {
             return parent.Tab(name);
         }
+
+        public PropertyConfigurator Mandatory(bool value = true)
+        {
+            Configuration.Mandatory = value;
+            return this;
+        }
+
+        public PropertyConfigurator Regex(string pattern)
+        {
+            Configuration.ValidationRegExp = pattern;
+            return this;
+        }
     }
 
     public class PropertyConfiguration
@@ -51,6 +63,8 @@ namespace Our.Umbraco.Fluent.ContentTypes
         public string Name { get; set; }
         public string Description { get; set; }
         public string DataType { get; set; }
+        public bool Mandatory { get; set; }
+        public string ValidationRegExp { get; set; }
 
         public PropertyConfiguration(string @alias)
         {

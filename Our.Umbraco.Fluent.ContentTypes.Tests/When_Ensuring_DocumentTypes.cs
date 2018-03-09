@@ -50,6 +50,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             StubDataType(50, "RTE");
             StubDataType(51, "Checkbox");
+            StubDataType(52, "Textstring");
 
             StubTemplate("template", new Guid("73B57DF0-F0F4-4F9A-992E-C2A4F8AB8346"));
 
@@ -75,6 +76,11 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                         .DisplayName("Block robots")
                         .Description("Chicken out")
                         .DataType("Checkbox")
+                    .Property("url")
+                        .DisplayName("Url")
+                        .Mandatory()
+                        .Regex("https?://[a-zA-Z0-9-.]+.[a-zA-Z]{2,}")
+                        .DataType("Textstring")
                 .Tab("Secret tab")
                     .Property("makeMoney")
                         .DisplayName("Make money from this")

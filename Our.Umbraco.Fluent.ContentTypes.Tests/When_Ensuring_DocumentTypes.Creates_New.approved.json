@@ -70,6 +70,26 @@
                     "sortOrder": 0,
                     "dataTypeId": 51,
                     "groupId": 0
+                },
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
+                    "alias": "url",
+                    "description": null,
+                    "validation": {
+                        "mandatory": true,
+                        "pattern": "https?://[a-zA-Z0-9-.]+.[a-zA-Z]{2,}"
+                    },
+                    "label": "Url",
+                    "sortOrder": 0,
+                    "dataTypeId": 52,
+                    "groupId": 0
                 }
             ],
             "inherited": false,
@@ -162,6 +182,26 @@
                     "contentTypeName": "A nice doctype",
                     "inherited": false,
                     "id": 0,
+                    "alias": "url",
+                    "description": null,
+                    "validation": {
+                        "mandatory": true,
+                        "pattern": "https?://[a-zA-Z0-9-.]+.[a-zA-Z]{2,}"
+                    },
+                    "label": "Url",
+                    "sortOrder": 0,
+                    "dataTypeId": 52,
+                    "groupId": -666
+                },
+                {
+                    "editor": null,
+                    "view": "is-nice.html",
+                    "config": {},
+                    "locked": false,
+                    "contentTypeId": 0,
+                    "contentTypeName": "A nice doctype",
+                    "inherited": false,
+                    "id": 0,
                     "alias": "makeMoney",
                     "description": "Tick here to make immense amounts of money",
                     "validation": {
@@ -183,7 +223,7 @@
     "isContainer": false,
     "listViewEditorName": "List View - Content",
     "allowedContentTypes": [
-        2    
+        2
     ],
     "compositeContentTypes": [
         "parent",

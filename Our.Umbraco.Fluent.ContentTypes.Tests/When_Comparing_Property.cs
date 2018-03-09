@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
@@ -12,6 +13,8 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         private PropertyGroup tab;
         private PropertyConfigurator richTextConfig;
         private IDataTypeDefinition dataTypeDefinition;
+        private IDataTypeDefinition urlPropertyDefinition;
+        private PropertyConfigurator urlConfigurator;
 
         [SetUp]
         public void Setup()
@@ -23,25 +26,36 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             contentType.PropertyGroups.Add(tab);
 
             dataTypeDefinition = StubDataType(5, "richtext");
+            urlPropertyDefinition = StubDataType(6, "textstring");
 
             AddRichTextProperty();
+            AddUrlProperty();
 
-            richTextConfig = Config
+            var tabConfigurator = Config
                 .DocumentType("contentType")
-                    .Tab("tab")
+                .Tab("tab");
+
+            richTextConfig = tabConfigurator
                         .Property("richtext")
                             .DisplayName("Rich text")
                             .Description("Write rich content here")
                             .DataType("richtext");
 
+            urlConfigurator = tabConfigurator
+                .Property("url")
+                    .DisplayName("Url")
+                    .Description("A relevant link")
+                    .DataType("textstring")
+                    .Mandatory()
+                    .Regex("https?://[a-zA-Z0-9-.]+.[a-zA-Z]{2,}");
+
             // TODO: Sort order
-            // TODO: Mandatory
         }
 
         [Test]
         public void For_Existing_Then_Is_Not_New()
         {
-            var propertyDiff = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsNew").False);
         }
@@ -49,7 +63,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         [Test]
         public void For_Equal_Existing_Then_Is_Not_Unsafe()
         {
-            var propertyDiff  = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsUnsafe").False);
         }
@@ -59,7 +73,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             tab.PropertyTypes.Clear();
 
-            var propertyDiff = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsNew").True);
         }
@@ -69,7 +83,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             richTextConfig.DisplayName("Fancy content");
 
-            var propertyDiff = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
         }
@@ -79,7 +93,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             richTextConfig.Description("Another description");
 
-            var propertyDiff = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
         }
@@ -91,7 +105,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 .DisplayName("New Name")
                 .Description("New description");
 
-            var diff = RichTextDiffgram();
+            var diff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(
                 diff.Comparisons,
@@ -106,7 +120,7 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
         {
             richTextConfig.DataType("NotTiny");
 
-            var propertyDiff = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
         }
@@ -117,7 +131,27 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
             StubDataType(6, "NotTiny");
             richTextConfig.DataType("NotTiny");
 
-            var propertyDiff = RichTextDiffgram();
+            var propertyDiff = PropertyDiffgram(RichTextDiffgram);
+
+            Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
+        }
+
+        [Test]
+        public void With_Different_Mandatory_Is_Unsafe()
+        {
+            urlConfigurator.Mandatory(false);
+
+            var propertyDiff = PropertyDiffgram(UrlDiffgram);
+
+            Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
+        }
+
+        [Test]
+        public void With_Different_Regex_Is_Unsafe()
+        {
+            urlConfigurator.Regex(@"\d");
+
+            var propertyDiff = PropertyDiffgram(UrlDiffgram);
 
             Assert.That(propertyDiff, Has.Property("IsUnsafe").True);
         }
@@ -134,16 +168,35 @@ namespace Our.Umbraco.Fluent.ContentTypes.Tests
                 });
         }
 
-        private PropertyTypeDiffgram RichTextDiffgram()
+        private void AddUrlProperty()
+        {
+            tab.PropertyTypes.Add(
+                new PropertyType(dataTypeDefinition)
+                {
+                    DataTypeDefinitionId = 6,
+                    Alias = "url",
+                    Name = "Url",
+                    Description = "A relevant link",
+                    Mandatory = true,
+                    ValidationRegExp = "https?://[a-zA-Z0-9-.]+.[a-zA-Z]{2,}"
+                });
+        }
+
+        private PropertyTypeDiffgram PropertyDiffgram(Func<Diffgram, PropertyTypeDiffgram> propertySelector)
         {
             var diffgram = Config.Compare();
-            var propertyTypeDiffgram = RichTextDiffgram(diffgram);
+            var propertyTypeDiffgram = propertySelector(diffgram);
             return propertyTypeDiffgram;
         }
 
         private static PropertyTypeDiffgram RichTextDiffgram(Diffgram diffgram)
         {
             return TabDiffgram(diffgram).Properties["richtext"];
+        }
+
+        private static PropertyTypeDiffgram UrlDiffgram(Diffgram diffgram)
+        {
+            return TabDiffgram(diffgram).Properties["url"];
         }
 
         private static TabDiffgram TabDiffgram(Diffgram diffgram)

@@ -276,7 +276,9 @@ namespace Our.Umbraco.Fluent.ContentTypes
                             {
                                 Name = propConfig.Name,
                                 Description = propConfig.Description,
-                                DataTypeDefinitionId = dataType.Id
+                                DataTypeDefinitionId = dataType.Id,
+                                Mandatory = propConfig.Mandatory,
+                                ValidationRegExp = propConfig.ValidationRegExp
                             };
                             group.PropertyTypes.Add(propertyType);
                         }
